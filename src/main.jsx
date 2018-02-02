@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'semantic-ui-css/semantic.min.css';
 import { BrowserRouter, Route } from 'react-router-dom';
-import Login from './pages/Login';
+import Login from './pages/login/Login';
 
 ReactDOM.render((
     <BrowserRouter>

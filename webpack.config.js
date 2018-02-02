@@ -20,6 +20,19 @@ let config = {
     module: {
         loaders: [
             {
+                test: /\.(png|gif)$/,
+                loader: 'url-loader'
+            },
+            {
+                test: /\.jpg$/,
+                loader: 'file-loader'
+            },
+    
+            {
+                test: /\.(ttf|eot|svg|woff2?)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'file-loader'
+            },
+            {
                 test: /\.(js|jsx)$/,
                 loader: 'babel-loader'
             },
@@ -27,7 +40,7 @@ let config = {
                 test: /\.css$/,
                 loaders: [
                     'style-loader?sourceMap',
-                    'css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+                    'css-loader'
                 ]
             },
             {
@@ -37,10 +50,6 @@ let config = {
                     'css-loader?modules&importLoaders=1&localIdentName=[path]__[name]__[local]___[hash:base64:5]',
                     'sass-loader?sourceMap'
                 ]
-            },
-            {
-                test: /\.(jpg|jpeg|png|gif)$/i,
-                loader: 'file-loader'
             }
         ]
     },
