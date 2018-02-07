@@ -69,6 +69,16 @@ let config = {
         port: 8083,
         hot: true,
         inline: true,
+        proxy:{
+            '/server':{
+                target: 'http://192.168.1.142:7001',
+                changeOrigin: true,
+                secure: false,
+                pathRewrite:{
+                    '^/server': ''
+                }
+            }
+        },
         after() {
             opn('http://localhost:'+ this.port, {app: 'chrome'})
         }

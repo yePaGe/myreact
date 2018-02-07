@@ -2,6 +2,7 @@ import React from 'react';
 import mainCss from '../../assets/css/main.scss';
 import loginCss from './login.scss';
 import { Button, Input } from 'semantic-ui-react';
+
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -17,6 +18,13 @@ class Login extends React.Component {
     }
     
     componentDidMount() {
+        axios.get('/server/login')
+            .then((res) =>{
+                console.log(res)
+            })
+            .catch((err) =>{
+                console.log(err)
+            })
         this.interval = setInterval(() => {
             if(this.state.seconds <= 0) {
                 clearInterval(this.interval);
