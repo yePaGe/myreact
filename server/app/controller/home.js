@@ -7,7 +7,14 @@ class HomeController extends Controller {
     this.ctx.body = 'hi, egg,girls?';
   }
   async login() {
-    this.ctx.body = this.ctx.model.User.find({});
+    let data = this.ctx.query
+    this.ctx.model.User.create({
+      username: data.username,
+      password: data.password
+    }, function(err, doc) {
+      console.log(err, doc)
+    })
+    this.ctx.body = 'ok'
   }
 }
 

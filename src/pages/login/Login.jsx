@@ -7,7 +7,9 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            seconds: 10
+            seconds: 10,
+            username: '',
+            password: ''
         };
     }
     
@@ -17,14 +19,47 @@ class Login extends React.Component {
         }))
     }
     
-    componentDidMount() {
-        axios.get('/server/login')
+    setForm(type, e) {
+        if(e.icon === 'user') {
+            this.setState(prev => ({
+                username: e.value
+            }))
+        }
+        else if(e.icon === 'privacy') {
+            this.setState(prev => ({
+                password: e.value
+            }))
+        }
+    }
+
+    toLogin() {
+        let name = this.state.username
+        let passwd = this.state.password
+
+        if(name.length === 0) {
+            alert('please enter your account!')
+            return
+        }
+        else if(passwd.length === 0) {
+            alert('please enter your password!')
+            return
+        }
+        axios.get('/server/login',{
+            params:{
+                name: name,
+                password: passwd
+            }
+        })
             .then((res) =>{
                 console.log(res)
             })
             .catch((err) =>{
                 console.log(err)
             })
+    }
+
+    componentDidMount() {
+        
         this.interval = setInterval(() => {
             if(this.state.seconds <= 0) {
                 clearInterval(this.interval);
@@ -51,9 +86,9 @@ class Login extends React.Component {
                         welcome, let's login!
                     </p>
                     <div className={loginCss.formCon}>
-                        <Input icon='user' iconPosition='left' placeholder='your account'/>
-                        <Input icon='privacy' iconPosition='left' placeholder='your password'/>
-                        <Button color='brown'>Brown</Button>
+                        <Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)}/>
+                        <Input icon='privacy' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)}/>
+                        <Button color='brown' onClick={this.toLogin.bind(this)}>LOGIN IN</Button>
                     </div>
                 </div>
             </div>
