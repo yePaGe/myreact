@@ -71,7 +71,7 @@ let config = {
         inline: true,
         proxy:{
             '/server':{
-                target: 'http://192.168.1.142:7001',
+                target: 'http://192.168.1.144:7001',
                 changeOrigin: true,
                 secure: false,
                 pathRewrite:{

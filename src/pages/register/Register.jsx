@@ -1,23 +1,16 @@
 import React from 'react';
 import mainCss from '../../assets/css/main.scss';
-import loginCss from './login.scss';
+import registerCss from './register.scss';
 import { Button, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-class Login extends React.Component {
+class Register extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            seconds: 10,
             username: '',
             password: ''
         };
-    }
-    
-    tick() {
-        this.setState(prevState => ({
-            seconds: prevState.seconds - 1
-        }))
     }
     
     setForm(type, e) {
@@ -33,7 +26,7 @@ class Login extends React.Component {
         }
     }
 
-    toLogin() {
+    toRegister() {
         let name = this.state.username
         let passwd = this.state.password
 
@@ -45,11 +38,9 @@ class Login extends React.Component {
             alert('please enter your password!')
             return
         }
-        axios.get('/server/login',{
-            params:{
+        axios.post('/server/register?_csrf={{ ctx.csrf | safe }}',{
                 name: name,
                 password: passwd
-            }
         })
             .then((res) =>{
                 console.log(res)
@@ -58,42 +49,25 @@ class Login extends React.Component {
                 console.log(err)
             })
     }
-
-    componentDidMount() {
-        
-        this.interval = setInterval(() => {
-            if(this.state.seconds <= 0) {
-                clearInterval(this.interval);
-                return
-            }
-            this.tick()
-        }, 1000);
-    }
-    
-    componentWillUnmount() {
-        clearInterval(this.interval)
-    }
     
     render() {
         let text = `${mainCss.textCenter} ${mainCss.textFont}`;
-        let timer = `${mainCss.textCenter} ${loginCss.timer}`;
+        let timer = `${mainCss.textCenter} ${registerCss.timer}`;
         let linkText = `${mainCss.textCenter} ${mainCss.mt}`;
+
         return(
             <div className={mainCss.main}>
-                <div className={timer}>
-                    {this.state.seconds}
-                </div>
-                <div className={loginCss.loginCon}>
+                <div className={registerCss.loginCon}>
                     <p className={text}>
-                        welcome, let's login!
+                        welcome, let's register!
                     </p>
-                    <div className={loginCss.formCon}>
+                    <div className={registerCss.formCon}>
                         <Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)}/>
                         <Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)}/>
-                        <Button color='brown' onClick={this.toLogin.bind(this)}>LOGIN IN</Button>
+                        <Button color='brown' onClick={this.toRegister.bind(this)}>REGISTER</Button>
                     </div>
                     <div className={linkText}>
-                        <Link to='/register'>to register ~</Link>  
+                        <Link to='/login'>Back to Login!</Link>
                     </div>
                 </div>
             </div>
@@ -101,4 +75,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default Register;

@@ -14,5 +14,11 @@ module.exports = appInfo => {
     options: {}
   }
 
+  config.security= {
+    csrf: {
+      queryName: '_csrf',
+      bodyName: '_csrf'
+    }
+  }
   return config;
 };
