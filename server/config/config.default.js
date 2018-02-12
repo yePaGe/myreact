@@ -10,14 +10,16 @@ module.exports = appInfo => {
   config.middleware = [];
 
   config.mongoose = {
-    url: 'mongodb://127.0.0.1:8080',
+    url: 'mongodb://127.0.0.1:8099',
     options: {}
   }
+
 
   config.security= {
     csrf: {
       queryName: '_csrf',
-      bodyName: '_csrf'
+      bodyName: '_csrf',
+      headerName: 'x-csrf-token'
     }
   }
   return config;

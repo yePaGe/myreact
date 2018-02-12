@@ -38,7 +38,7 @@ class Register extends React.Component {
             alert('please enter your password!')
             return
         }
-        axios.post('/server/register?_csrf={{ ctx.csrf | safe }}',{
+        axios.post('/server/register',{
                 name: name,
                 password: passwd
         })

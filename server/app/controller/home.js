@@ -4,13 +4,23 @@ const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
   async index() {
-    this.ctx.body = 'aaaa';
+    if(!this.ctx.query.token) {
+      this.ctx.body = this.ctx.headers.cookie
+      // this.ctx.body = 'not login'
+    }
+    else {
+      this.ctx.body = 'has login'
+    }
   }
   async register() {
-    let data = this.ctx.request.body;
-    console.log(data)
-    console.log(this.ctx.request.cookie)
-    this.ctx.body = 'aaaa';
+    console.log(this.ctx.request)
+    if(!this.ctx.request.Cookie) {
+      this.ctx.body = 'aaaa';
+    }
+    else {
+      console.log(this.ctx.request.Cookie)
+      this.ctx.body = 'bbbb';
+    }
   }
   async login() {
     let data = this.ctx.request.body
