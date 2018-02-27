@@ -1,26 +1,29 @@
 'use strict';
-
+const Config = require('../../config/config.default');
 const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
   async index() {
-    if(!this.ctx.query.token) {
-      this.ctx.body = this.ctx.headers.cookie
-      // this.ctx.body = 'not login'
+    if(!this.ctx.request.header.cookie) {
+      this.ctx.body = await 'first open'
     }
     else {
-      this.ctx.body = 'has login'
+      if(this.ctx.request.query.token){
+        this.ctx.body = await 'has login'
+      }
+      else {
+        this.ctx.body = await 'please get login'
+      }
     }
   }
   async register() {
-    console.log(this.ctx.request)
-    if(!this.ctx.request.Cookie) {
-      this.ctx.body = 'aaaa';
-    }
-    else {
-      console.log(this.ctx.request.Cookie)
-      this.ctx.body = 'bbbb';
-    }
+    let data = this.ctx.request.body
+    await this.ctx.model.User.create({
+      username: data.username,
+      password: data.password
+    }, function(err, doc) {
+      this.ctx.body = err + doc
+    })
   }
   async login() {
     let data = this.ctx.request.body

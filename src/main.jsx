@@ -28,7 +28,7 @@ axios.get('/server/islogin',{
         return Object.keys(item)[0] === 'csrfToken'
     })[0].csrfToken
     axios.defaults.headers.post['x-csrf-token'] = csrfToken;
-
+    window.sessionStorage.setItem('token', csrfToken)
 }).catch((err) => {
     console.log(err)
 })
