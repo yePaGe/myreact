@@ -13,10 +13,11 @@ module.exports = appInfo => {
     csrf: {
       cookieName: 'csrfToken'
     }
+    // csrf: false
   }
 
   config.mongoose = {
-    url: 'mongodb://127.0.0.1/test',
+    url: 'mongodb://127.0.0.1/mytest',
     options: {}
   }
 

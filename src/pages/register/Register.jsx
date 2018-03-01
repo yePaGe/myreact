@@ -39,7 +39,7 @@ class Register extends React.Component {
             return
         }
         axios.post('/server/register',{
-                name: name,
+                username: name,
                 password: passwd
         })
             .then((res) =>{

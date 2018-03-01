@@ -45,11 +45,9 @@ class Login extends React.Component {
             alert('please enter your password!')
             return
         }
-        axios.get('/server/login',{
-            params:{
-                name: name,
+        axios.post('/server/login',{
+                username: name,
                 password: passwd
-            }
         })
             .then((res) =>{
                 console.log(res)
