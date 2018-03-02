@@ -5,14 +5,43 @@ const Controller = require('egg').Controller;
 class UserController extends Controller {
   async islogin() {
     if(!this.ctx.request.header.cookie) {
-      this.ctx.body = await 'first open'
+      this.ctx.body = {
+        code: 1,
+        msg: 'first open'
+      }
     }
     else {
-      if(this.ctx.request.query.token){
-        this.ctx.body = await 'has login'
+      if(this.ctx.request.query.key){
+        let id = this.ctx.request.query.key
+        let nowDate = Date.now()
+        let islogin = await this.service.token.checkToken(id)
+        if(!islogin) {
+          this.ctx.body = {
+            code: 2,
+            msg: 'please get login'
+          }
+        }
+        else {
+          if(nowDate < islogin.deadline) {
+            this.ctx.body = {
+              code: 0,
+              msg: 'has login'
+            }
+          }
+          else {
+            let tologout = await this.service.user.updateOne(islogin.userId, { islogin: false })
+            this.ctx.body = {
+              code: 3,
+              msg: 'login outdate, login again!'
+            }
+          }
+        }
       }
       else {
-        this.ctx.body = await 'please get login'
+        this.ctx.body =  {
+          code: 2,
+          msg: 'please get login'
+        }
       }
     }
   }
@@ -56,12 +85,12 @@ class UserController extends Controller {
     else {
       if(user.password === data.password) {
         let loginDate = new Date()
-        let tologin =  await this.service.user.update(user.id, { islogin: true }, {lastLogin: loginDate})
-        let token = await this.service.token.createToken(user)
-        this.ctx.cookies.set('token', tokenKey)
+        let tologin =  await this.service.user.updateMany(user.id, { islogin: true }, {lastLogin: loginDate})
+        let tokenKey = await this.service.token.createToken(user)
+        this.ctx.cookies.set('tokenKey', tokenKey)
         this.ctx.body = {
           code: 0,
-          cont: tologin,
+          token: tokenKey,
           msg: 'login successfully!'
         }       
       }

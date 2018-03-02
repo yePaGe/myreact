@@ -3,6 +3,7 @@ import mainCss from '../../assets/css/main.scss';
 import loginCss from './login.scss';
 import { Button, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { History } from 'react-router';
 
 class Login extends React.Component {
     constructor(props) {
@@ -50,7 +51,11 @@ class Login extends React.Component {
                 password: passwd
         })
             .then((res) =>{
-                console.log(res)
+                const data = res.data
+                if(data.code == 0) {
+                    window.sessionStorage.setItem('tokenKey', data.token)              
+                    this.props.history.push('/home')
+                }
             })
             .catch((err) =>{
                 console.log(err)
