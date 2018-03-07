@@ -5,13 +5,21 @@ import { Button, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { History } from 'react-router';
 
+import Msg from '../msg/Msg'
+
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             seconds: 10,
             username: '',
-            password: ''
+            password: '',
+            msg: 'not login',
+            isShowMsg: {
+                isShow: false,
+                type: 'success',
+                msg: ''
+            }
         };
     }
     
@@ -54,7 +62,15 @@ class Login extends React.Component {
                 const data = res.data
                 if(data.code == 0) {
                     window.sessionStorage.setItem('tokenKey', data.token)              
-                    this.props.history.push('/home')
+                    // this.props.history.push('/home')
+                    this.setState({
+                        msg: data.msg,
+                        isShowMsg:{
+                            isShow: true,
+                            msg: data.msg,
+                            type: 'success'
+                        }
+                    })
                 }
             })
             .catch((err) =>{
@@ -62,29 +78,38 @@ class Login extends React.Component {
             })
     }
 
+    hideMsg(newMsg) {
+        this.setState({isShowMsg: newMsg})
+    }
+
     componentDidMount() {
         
-        this.interval = setInterval(() => {
-            if(this.state.seconds <= 0) {
-                clearInterval(this.interval);
-                return
-            }
-            this.tick()
-        }, 1000);
+        // this.interval = setInterval(() => {
+        //     if(this.state.seconds <= 0) {
+        //         clearInterval(this.interval);
+        //         return
+        //     }
+        //     this.tick()
+        // }, 1000);
     }
     
     componentWillUnmount() {
-        clearInterval(this.interval)
+        // clearInterval(this.interval)
     }
     
     render() {
         let text = `${mainCss.textCenter} ${mainCss.textFont}`;
         let timer = `${mainCss.textCenter} ${loginCss.timer}`;
         let linkText = `${mainCss.textCenter} ${mainCss.mt}`;
+        console.log(1)
+        console.log(this.state.isShowMsg)
         return(
             <div className={mainCss.main}>
                 <div className={timer}>
                     {this.state.seconds}
+                </div>
+                <div >
+                    <Msg msg={this.state.isShowMsg} hideMsg={this.hideMsg.bind(this)}/>
                 </div>
                 <div className={loginCss.loginCon}>
                     <p className={text}>

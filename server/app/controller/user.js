@@ -29,7 +29,7 @@ class UserController extends Controller {
             }
           }
           else {
-            let tologout = await this.service.user.updateOne(islogin.userId, { islogin: false })
+            let tologout = await this.service.user.update(islogin.userId, { islogin: false })
             this.ctx.body = {
               code: 3,
               msg: 'login outdate, login again!'
@@ -85,7 +85,7 @@ class UserController extends Controller {
     else {
       if(user.password === data.password) {
         let loginDate = new Date()
-        let tologin =  await this.service.user.updateMany(user.id, { islogin: true }, {lastLogin: loginDate})
+        let tologin =  await this.service.user.update(user.id, { islogin: true, lastLogin: loginDate })
         let tokenKey = await this.service.token.createToken(user)
         this.ctx.cookies.set('tokenKey', tokenKey)
         this.ctx.body = {

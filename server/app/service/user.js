@@ -10,15 +10,11 @@ class UserService extends Service {
         return user    
     }
 
-    async updateOne(id, newdata1) {
-        let update = await this.ctx.model.User.update({_id: id}, {$set: newdata1})
+    async update(id, newdata) {
+        let update = await this.ctx.model.User.update({_id: id}, {$set: newdata})
         return update
     }
-    async updateMany(id, newdata1, newdata2) {
-        let update = await this.ctx.model.User.updateMany({_id: id}, {$set: newdata1, newdata2})
-        return update
-    }
-
+    
     async create(user) {
         let nowDate = new Date()
         let newuser = await this.ctx.model.User.create({

@@ -16,7 +16,7 @@ axios.get('/server/islogin',{
 }).then((res) => {
     const data = res.data
     
-    let csrfToken
+    let csrfToken = ''
     if(!window.sessionStorage.csrfToken) {
         let getCookie = document.cookie
         let cookie = getCookie.split(';')
@@ -24,13 +24,14 @@ axios.get('/server/islogin',{
             let i = item.split('=')
             let obj = {}
             obj[i[0]] = i[1]
+            if(Object.keys(obj)[0] == 'csrfToken') {
+                csrfToken = Object.values(obj)[0]
+                window.sessionStorage.setItem('csrfToken', csrfToken)
+            }
             return obj
         })
-    
-        csrfToken = cookieList.filter((item) => {
-            return Object.keys(item)[0] === 'csrfToken'
-        })[0].csrfToken
-        window.sessionStorage.setItem('csrfToken', csrfToken)
+
+        
     }
     else {
         csrfToken = window.sessionStorage.getItem('csrfToken')
