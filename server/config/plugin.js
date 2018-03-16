@@ -4,10 +4,9 @@
 // exports.static = true;
 exports.nunjucks = {
     enable: true,
-    package: 'egg-view-nunjucks'
-}
-
+    package: 'egg-view-nunjucks',
+};
 exports.mongoose = {
     enable: true,
-    package: 'egg-mongoose'
-}
+    package: 'egg-mongoose',
+};
