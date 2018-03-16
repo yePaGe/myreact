@@ -4,22 +4,22 @@ module.exports = appInfo => {
   const config = exports = {};
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = '123456789';
+  config.keys = '123456789' + appInfo;
 
   // add your config here
   config.middleware = [];
 
   config.security = {
     csrf: {
-      cookieName: 'csrfToken'
-    }
+      cookieName: 'csrfToken',
+    },
     // csrf: false
-  }
+  };
 
   config.mongoose = {
     url: 'mongodb://127.0.0.1/mytest',
-    options: {}
-  }
+    options: {},
+  };
 
   return config;
 };
