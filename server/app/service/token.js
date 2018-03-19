@@ -1,31 +1,35 @@
 'use strict';
 
 const Service = require('egg').Service;
-const crypto = require('crypto-js');
+const crypto = require('crypto');
 
 class TokenService extends Service {
-  async createToken(token) {
+  async createToken(data) {
     const nowDate = Date.now();
     const deadline = nowDate + (1000 * 15);
+    let md5 = crypto.createHash('md5');
+    md5.update(data._id + data.username)
+    const token = md5.digest('hex');
     const newToken = await this.ctx.model.Token.create({
-        userId: token['_id'],
-        username: token.username,
+        token: token,
         deadline: deadline,
     });
-    const secret = 'keykey';
-    const tokenId =  newToken['_id'].toString();
-    let cryptoId = crypto.AES.encrypt(tokenId, secret);
-    cryptoId = cryptoId.toString();
-    return cryptoId;
+    
+    return newToken;
   }
   
-  async checkToken(id) {
-    const cryptoId = crypto.AES.decrypt(id.toString(), 'keykey');
-    const key = cryptoId.toString(crypto.enc.Utf8);
+  async checkToken(token) {
     const checkToken = await this.ctx.model.Token.findOne({
-      _id: key,
+      token: token
     });
     return checkToken;
+  }
+
+  async deleteToken(id) {
+    const del = await this.ctx.model.Token.deleteOne({
+      _id: id
+    });
+    return del
   }
 }
 

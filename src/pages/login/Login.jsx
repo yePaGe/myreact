@@ -62,7 +62,6 @@ class Login extends React.Component {
                 const data = res.data
                 if(data.code == 0) {
                     window.sessionStorage.setItem('tokenKey', data.token)              
-                    // this.props.history.push('/home')
                     this.setState({
                         msg: data.msg,
                         isShowMsg:{
@@ -71,6 +70,9 @@ class Login extends React.Component {
                             type: 'success'
                         }
                     })
+                    setTimeout(() => {
+                        this.props.history.push('/home')
+                    }, 500)
                 }
             })
             .catch((err) =>{
@@ -78,38 +80,22 @@ class Login extends React.Component {
             })
     }
 
-    hideMsg(newMsg) {
-        this.setState({isShowMsg: newMsg})
-    }
-
     componentDidMount() {
-        
-        // this.interval = setInterval(() => {
-        //     if(this.state.seconds <= 0) {
-        //         clearInterval(this.interval);
-        //         return
-        //     }
-        //     this.tick()
-        // }, 1000);
+     
     }
     
     componentWillUnmount() {
-        // clearInterval(this.interval)
     }
     
     render() {
         let text = `${mainCss.textCenter} ${mainCss.textFont}`;
         let timer = `${mainCss.textCenter} ${loginCss.timer}`;
         let linkText = `${mainCss.textCenter} ${mainCss.mt}`;
-        console.log(1)
-        console.log(this.state.isShowMsg)
+ 
         return(
             <div className={mainCss.main}>
-                <div className={timer}>
-                    {this.state.seconds}
-                </div>
                 <div >
-                    <Msg msg={this.state.isShowMsg} hideMsg={this.hideMsg.bind(this)}/>
+                    <Msg msg={this.state.isShowMsg}/>
                 </div>
                 <div className={loginCss.loginCon}>
                     <p className={text}>
