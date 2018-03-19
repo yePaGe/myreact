@@ -43,40 +43,26 @@ class App extends React.Component{
             // 给post请求带上csrfToken
             axios.defaults.headers.post['x-csrf-token'] = csrfToken;
             
+            console.log('res',data)
             if(!data.code) { // 已登录就调转到当前路由的页面
                 console.log(data.msg)
             }
             else { // 未登录就跳转回登录界面
+                window.sessionStorage.removeItem('tokenKey')
+                console.log(data.msg,'123')
                 if(this.props.history.location.pathname == '/login') {
                     return
                 }
                 else {
                     this.props.history.push('/login')
                 }
-                console.log(data.msg)
             }
         }).catch((err) => {
             // 任何错误都删除登录状态，调整会登录界面
             console.log(err)
-            window.sessionStorage.clear()
+            window.sessionStorage.removeItem('tokenKey')
             this.props.history.push('/login')
         })
-    }
-
-    componentWillReceiveProps(nextProps) {
-        console.log('route')
-    }
-    shouldComponentUpdate() {
-        console.log('sss')
-        let token = !window.sessionStorage.getItem('tokenKey') ? '' : window.sessionStorage.getItem('tokenKey')
-        if(token.length == 0) {
-            this.props.history.push('/')
-            return true
-        }
-        else {
-            return false
-        }
-        
     }
 
     render() {

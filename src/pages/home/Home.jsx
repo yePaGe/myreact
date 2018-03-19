@@ -1,10 +1,16 @@
 import React from 'react';
 import homeCss from './home.scss';
-import { Link } from 'react-router-dom';
+import { Link, History } from 'react-router-dom';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
+    }
+    componentWillMount() {
+        console.log('aa')
+        if(!window.sessionStorage.tokenKey) {
+            this.props.history.push('/login')
+        }
     }
 
     render() {
