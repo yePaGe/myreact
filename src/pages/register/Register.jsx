@@ -38,7 +38,7 @@ class Register extends React.Component {
             alert('please enter your password!')
             return
         }
-        axios.post('/server/register',{
+        React.axios.post('/server/register',{
                 username: name,
                 password: passwd
         })
@@ -48,6 +48,12 @@ class Register extends React.Component {
             .catch((err) =>{
                 console.log(err)
             })
+    }
+
+    handleEnter(event) {
+        if(event.keyCode == 13) {
+            this.toRegister()
+        }
     }
     
     render() {
@@ -62,8 +68,8 @@ class Register extends React.Component {
                         welcome, let's register!
                     </p>
                     <div className={registerCss.formCon}>
-                        <Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)}/>
-                        <Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)}/>
+                        <Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
                         <Button color='brown' onClick={this.toRegister.bind(this)}>REGISTER</Button>
                     </div>
                     <div className={linkText}>

@@ -10,14 +10,11 @@ import { History } from 'react-router';
 class App extends React.Component{
 
     componentWillMount() {
-        console.log('111')
-        let token = !window.sessionStorage.getItem('tokenKey') ? '' : window.sessionStorage.getItem('tokenKey')
-        // if(token.length == 0) {
-        //     this.props.history.push('/')
-        // }
-        axios.get('/server/islogin',{
+        let tokenKey = !window.sessionStorage.getItem('tokenKey') ? '' : JSON.parse(window.sessionStorage.getItem('tokenKey'))
+        console.log(tokenKey)
+        React.axios.get('/server/islogin',{
             params:{
-                key: token,
+                key: tokenKey.token,
             }
         }).then((res) => {
             const data = res.data   
@@ -41,7 +38,7 @@ class App extends React.Component{
                 csrfToken = window.sessionStorage.getItem('csrfToken')
             }
             // 给post请求带上csrfToken
-            axios.defaults.headers.post['x-csrf-token'] = csrfToken;
+            React.axios.defaults.headers.post['x-csrf-token'] = csrfToken;
             
             console.log('res',data)
             if(!data.code) { // 已登录就调转到当前路由的页面
@@ -49,7 +46,6 @@ class App extends React.Component{
             }
             else { // 未登录就跳转回登录界面
                 window.sessionStorage.removeItem('tokenKey')
-                console.log(data.msg,'123')
                 if(this.props.history.location.pathname == '/login') {
                     return
                 }

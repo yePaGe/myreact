@@ -7,7 +7,7 @@ class UserService extends Service {
         let user = await this.ctx.model.User.findOne({
             username: username
         });
-        return user    ;
+        return user;
     }
     async update(id, newdata) {
         let update = await this.ctx.model.User.update({_id: id}, {$set: newdata});
@@ -20,7 +20,7 @@ class UserService extends Service {
             password: user.password,
             islogin: false,
             createDate: nowDate,
-            lastLogin: nowDate,
+            lastLogin: nowDate
         });
         return newuser;
     }

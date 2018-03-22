@@ -85,12 +85,13 @@ class UserController extends Controller {
     } else {
       if (user.password === pwd) {
         const loginDate = new Date();
-        await this.service.user.update(user.id, { islogin: true, lastLogin: loginDate });
         const tokenKey = await this.service.token.createToken(user);
+        await this.service.user.update(user.id, { islogin: true, lastLogin: loginDate, tokenId: tokenKey._id });
         this.ctx.cookies.set('tokenKey', tokenKey.token);
         this.ctx.body = {
           code: 0,
           token: tokenKey.token,
+          user: user.username,
           msg: 'login successfully!',
         };
       } else {
@@ -101,6 +102,37 @@ class UserController extends Controller {
       }
     }
   }
+
+  async logout() {
+    const username = this.ctx.request.query.user;
+    const user = await this.service.user.findOne(username)
+    if(!user) {
+      this.ctx.body = {
+        code: 1,
+        msg: 'user has been deleted, please register again'
+      }
+    }
+    else {
+      const logoutOK = await this.service.user.update(user._id, {islogin: false})
+      const delToken = await this.service.token.deleteToken(user.tokenId)
+      if(logoutOK && delToken) {
+        this.ctx.body = {
+          code: 0,
+          msg: 'already log out~'
+        }
+      }
+    }
+  }
+
+  async userList() {
+    const userList = await this.ctx.model.User.find({})
+    this.ctx.body = {
+      code: 0,
+      list: userList
+    }
+  }
+
+  
 }
 
 module.exports = UserController;

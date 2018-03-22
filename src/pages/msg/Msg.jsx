@@ -29,10 +29,10 @@ class Msg extends React.Component {
                     </Message>
                 )
             }
-            else if(propsData.type) {
+            else if(propsData.type == 'error') {
                 return (
                     <Message negative>
-                        <Message.Header>ok</Message.Header>
+                        <Message.Header>fail</Message.Header>
                         <p>{propsData.msg}</p>
                     </Message>
                 )

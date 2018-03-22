@@ -54,14 +54,19 @@ class Login extends React.Component {
             alert('please enter your password!')
             return
         }
-        axios.post('/server/login',{
-                username: name,
-                password: passwd
+        React.axios.post('/server/login',{
+            username: name,
+            password: passwd
         })
             .then((res) =>{
                 const data = res.data
                 if(data.code == 0) {
-                    window.sessionStorage.setItem('tokenKey', data.token)              
+                    const token = {
+                        id: data.id,
+                        token: data.token
+                    }
+                    window.sessionStorage.setItem('tokenKey', JSON.stringify(token))
+                    window.sessionStorage.setItem('username', data.user)              
                     this.setState({
                         msg: data.msg,
                         isShowMsg:{
@@ -80,6 +85,12 @@ class Login extends React.Component {
             })
     }
 
+    handleEnter(event) {
+        if(event.keyCode == 13) {
+            this.toLogin()
+        }
+    }
+
     componentDidMount() {
      
     }
@@ -88,12 +99,13 @@ class Login extends React.Component {
     }
     
     render() {
-        let text = `${mainCss.textCenter} ${mainCss.textFont}`;
-        let timer = `${mainCss.textCenter} ${loginCss.timer}`;
-        let linkText = `${mainCss.textCenter} ${mainCss.mt}`;
+        const text = `${mainCss.textCenter} ${mainCss.textFont}`;
+        const timer = `${mainCss.textCenter} ${loginCss.timer}`;
+        const linkText = `${mainCss.textCenter} ${mainCss.mt}`;
+        const mainContent = `${mainCss.main} ${loginCss.loginBg}`;
  
         return(
-            <div className={mainCss.main}>
+            <div className={mainContent}>
                 <div >
                     <Msg msg={this.state.isShowMsg}/>
                 </div>
@@ -102,8 +114,8 @@ class Login extends React.Component {
                         welcome, let's login!
                     </p>
                     <div className={loginCss.formCon}>
-                        <Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)}/>
-                        <Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)}/>
+                        <Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
                         <Button color='brown' onClick={this.toLogin.bind(this)}>LOGIN IN</Button>
                     </div>
                     <div className={linkText}>

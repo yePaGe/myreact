@@ -8,6 +8,7 @@ module.exports = app => {
         islogin: { type: Boolean },
         createDate: { type: String },
         lastLogin: { type: String },
+        tokenId: { type: String }
     });
     
     return mongoose.model('User', UserSchema);

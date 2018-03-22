@@ -6,7 +6,7 @@ const crypto = require('crypto');
 class TokenService extends Service {
   async createToken(data) {
     const nowDate = Date.now();
-    const deadline = nowDate + (1000 * 15);
+    const deadline = nowDate + (1000 * 60 * 60 * 24);
     let md5 = crypto.createHash('md5');
     md5.update(data._id + data.username)
     const token = md5.digest('hex');
