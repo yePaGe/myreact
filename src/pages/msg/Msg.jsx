@@ -17,7 +17,7 @@ class Msg extends React.Component {
         let propsData = this.props.msg
         if(!propsData.isShow) {
             return (
-                <div>nothing!</div>
+                <div></div>
             )
         }
         else {

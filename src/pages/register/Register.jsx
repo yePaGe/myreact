@@ -38,7 +38,7 @@ class Register extends React.Component {
             alert('please enter your password!')
             return
         }
-        React.axios.post('/server/register',{
+        React.axios.post('/server/users/add',{
                 username: name,
                 password: passwd
         })

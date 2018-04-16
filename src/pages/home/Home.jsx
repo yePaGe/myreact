@@ -1,7 +1,7 @@
 import React from 'react';
 import homeCss from './home.scss';
 import mainCss from '../../assets/css/main.scss';
-import { Table, Icon, Button } from 'semantic-ui-react';
+import { Table, Icon, Button, Input } from 'semantic-ui-react';
 
 import { Link, History } from 'react-router-dom';
 
@@ -16,7 +16,8 @@ class Home extends React.Component {
                 type: 'success',
                 msg: ''
             },
-            userList: []
+            userList: [],
+            searchKey: ''
         }
     }
     componentWillMount() {
@@ -47,7 +48,7 @@ class Home extends React.Component {
         })
     }
     getUserList() {
-        React.axios('/server/users').then((res) => {
+        React.axios('/server/users/list').then((res) => {
             if(!res.data.code) {
                 this.setState({
                     userList: res.data.list
@@ -56,13 +57,45 @@ class Home extends React.Component {
         })
     }
     toDel(id) {
-        React.axios('/server/delete', {
+        React.axios('/server/users/del', {
             params: {
                 id: id
             }
         }).then((res) => {
             const data = res.data
+            this.setState({
+                isShowMsg:{
+                    isShow: true,
+                    msg: res.data.msg,
+                    type: res.data.code == 0 ? 'success' : 'error'
+                }
+            })
+            setTimeout(() => {
+                this.setState({
+                    isShowMsg:{
+                        isShow: false,
+                        msg: '',
+                        type: 'success'
+                    }
+                })
+            }, 1000)
+            this.getUserList()
+        })
+    }
+    searchUser(key) {
+        React.axios('/server/users/search', {
+            params: {
+                key: key
+            }
+        }).then((res) => {
+            const data = res.data;
             if(!data.code) {
+                this.setState({
+                    searchKey: '',
+                    userList: data.list
+                })
+            }
+            else {
                 this.setState({
                     isShowMsg:{
                         isShow: true,
@@ -82,18 +115,24 @@ class Home extends React.Component {
             }
         })
     }
+    iptValue(e) {
+        console.log(e.target.value)
+        this.setState({
+            searchKey: e.target.value
+        })
+    }
 
     render() {
         const userList = []
         this.state.userList.forEach((item) => {
             userList.push(
-                <Table.Row>
+                <Table.Row key={item._id}>
                     <Table.Cell>{item.username}</Table.Cell>
                     <Table.Cell>{item.createDate}</Table.Cell>
                     <Table.Cell>{item.lastLogin}</Table.Cell>
                     <Table.Cell>{item.tokenId}</Table.Cell>
                     <Table.Cell>
-                        <Button onClick={this.toDel.bind(this, item.id)}>删除</Button>
+                        <Button onClick={this.toDel.bind(this, item._id)}>删除</Button>
                     </Table.Cell>
                 </Table.Row>
             )
@@ -105,6 +144,11 @@ class Home extends React.Component {
                 </div>
                 <div className={homeCss.topBanner}>
                     <Icon name='sign out' onClick={this.logout.bind(this)}/>
+                    <Input 
+                        icon={<Icon name='search' inverted circular link onClick={this.searchUser.bind(this, this.state.searchKey)}/>}
+                        placeholder='Search...' 
+                        value={this.state.searchKey}
+                        onChange={this.iptValue.bind(this)}/>
                 </div>
                 <div className={homeCss.listContent}>
                     <Table celled padded>

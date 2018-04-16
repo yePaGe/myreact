@@ -125,14 +125,53 @@ class UserController extends Controller {
   }
 
   async userList() {
-    const userList = await this.ctx.model.User.find({})
+    const userList = await this.service.user.getList()
     this.ctx.body = {
       code: 0,
       list: userList
     }
   }
 
-  
+  async delUser() {
+    const id = this.ctx.request.query.id
+    const del = await this.service.user.delete(id)
+    if(!del) {
+      this.ctx.body = {
+        code: 0,
+        msg: 'delete ok!'
+      }
+    }
+    else if(del == 1) {
+      this.ctx.body = {
+        code: 1,
+        msg: 'delete fail! user not existed!'
+      }
+    }
+    else {
+      this.ctx.body = {
+        code: 2,
+        msg: 'delete fail!'
+      }
+    }
+  }
+
+  async searchUser() {
+    const key = this.ctx.request.query.key
+    const res = await this.service.user.findOne(key)
+    let list =[]
+    if(!res) {
+      this.ctx.body = {
+        code: 1,
+        msg: 'user not found!'
+      }
+    }
+    else {
+      this.ctx.body = {
+        code: 0,
+        list: list.push(res)
+      }
+    }
+  }
 }
 
 module.exports = UserController;

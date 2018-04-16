@@ -66,7 +66,7 @@ let config = {
     ],
     devServer: {
         host: '127.0.0.1',
-        port: 8083,
+        port: 8088,
         hot: true,
         inline: true,
         proxy:{
