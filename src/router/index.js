@@ -11,7 +11,6 @@ class App extends React.Component{
 
     componentWillMount() {
         let tokenKey = !window.sessionStorage.getItem('tokenKey') ? '' : JSON.parse(window.sessionStorage.getItem('tokenKey'))
-        console.log(tokenKey)
         React.axios.get('/server/islogin',{
             params:{
                 key: tokenKey.token,
@@ -27,7 +26,8 @@ class App extends React.Component{
                     let i = item.split('=')
                     let obj = {}
                     obj[i[0]] = i[1]
-                    if(Object.keys(obj)[0] == 'csrfToken') {
+                    let name = Object.keys(obj)[0].trim()
+                    if(name == 'csrfToken') {
                         csrfToken = Object.values(obj)[0]
                         window.sessionStorage.setItem('csrfToken', csrfToken)
                     }

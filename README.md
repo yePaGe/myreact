@@ -8,3 +8,16 @@
 6. 当对数据表写入数据时，会自动生成相应的表。
 7. controller和service分开写，避免回调函数的嵌套使用。
 8. 用户信息列表的密码应加密后再存入数据表中。
+
+
+# 项目启动步骤：
+## 数据库
+1. 启动mongod数据库 'net start MongoDB';
+2. 利用node应用的进程管理器启动adminMongo并维持运行，cmd进入adminMongo此node项目文件夹，'pm2 start app.js';
+3. 可以访问 'http://localhost:1234' 查看并操作数据库;
+
+## 服务端
+1. 进入server文件夹， 'cnpm run dev';
+
+## 客户端
+1. 进入myreact文件夹， 'cnpm run start';
