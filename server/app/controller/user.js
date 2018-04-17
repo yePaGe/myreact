@@ -134,7 +134,7 @@ class UserController extends Controller {
 
   async delUser() {
     const id = this.ctx.request.query.id
-    const del = await this.service.user.delete(id)
+    const del = await this.service.user.delete(id, tokenId)
     if(!del) {
       this.ctx.body = {
         code: 0,

@@ -3,7 +3,8 @@ import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import Login from '../pages/login/Login'; 
 import Register from '../pages/register/Register';
-import Home from '../pages/home/Home';
+import Home from '../pages/views/home/Home';
+import User from '../pages/views/user/User';
 import mainCss from '../assets/css/main.scss';
 import { History } from 'react-router';
 
@@ -45,19 +46,21 @@ class App extends React.Component{
                 console.log(data.msg)
             }
             else { // 未登录就跳转回登录界面
+                // 未登录不显示用户信息
                 window.sessionStorage.removeItem('tokenKey')
-                if(this.props.history.location.pathname == '/login') {
-                    return
-                }
-                else {
-                    this.props.history.push('/login')
-                }
+                // if(this.props.history.location.pathname == '/login') {
+                //     return
+                // }
+                // else {
+                //     this.props.history.push('/login')
+                // }
             }
         }).catch((err) => {
             // 任何错误都删除登录状态，调整会登录界面
+            // 未登录不显示用户信息
             console.log(err)
             window.sessionStorage.removeItem('tokenKey')
-            this.props.history.push('/login')
+            // this.props.history.push('/login')
         })
     }
 

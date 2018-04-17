@@ -1,7 +1,7 @@
 import React from 'react';
 import mainCss from '../../assets/css/main.scss';
 import registerCss from './register.scss';
-import { Button, Input } from 'semantic-ui-react';
+import { Button, Input, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 class Register extends React.Component {
@@ -44,6 +44,7 @@ class Register extends React.Component {
         })
             .then((res) =>{
                 console.log(res)
+                this.props.logMsg(res)
             })
             .catch((err) =>{
                 console.log(err)
@@ -64,6 +65,7 @@ class Register extends React.Component {
         return(
             <div className={mainCss.main}>
                 <div className={registerCss.loginCon}>
+                    <Icon name='remove' onClick={this.props.closeModel} style={{'float': 'right', 'cursor': 'pointer'}}/>
                     <p className={text}>
                         welcome, let's register!
                     </p>
@@ -72,9 +74,9 @@ class Register extends React.Component {
                         <Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
                         <Button color='brown' onClick={this.toRegister.bind(this)}>REGISTER</Button>
                     </div>
-                    <div className={linkText}>
-                        <Link to='/login'>Back to Login!</Link>
-                    </div>
+                    {/* <div className={linkText}>
+                        <Link to='/login' className={mainCss.yellow}>Back to Login!</Link>
+                    </div> */}
                 </div>
             </div>
         )

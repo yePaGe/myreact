@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>my test blog</title>
+    <title>定制</title>
     <style>
         html, body, #app{
-            height: 100%;
+            height: auto!important;
             width: 100%;
             margin: 0;
         }
@@ -14,5 +14,9 @@
 <body>
     <div id="app"></div>
     <script src='./dist/bundle.js'></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=eBGR7XzaPhB5UbYARl3E7ksdkMdgrCw7"></script>
+    <script>
+        window.BMap = BMap
+    </script>
 </body>
 </html>

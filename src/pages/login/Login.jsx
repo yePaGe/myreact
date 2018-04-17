@@ -1,7 +1,7 @@
 import React from 'react';
 import mainCss from '../../assets/css/main.scss';
 import loginCss from './login.scss';
-import { Button, Input } from 'semantic-ui-react';
+import { Button, Input, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { History } from 'react-router';
 
@@ -15,11 +15,11 @@ class Login extends React.Component {
             username: '',
             password: '',
             msg: 'not login',
-            isShowMsg: {
-                isShow: false,
-                type: 'success',
-                msg: ''
-            }
+            // isShowMsg: {
+            //     isShow: false,
+            //     type: 'success',
+            //     msg: ''
+            // }
         };
     }
     
@@ -61,23 +61,18 @@ class Login extends React.Component {
             .then((res) =>{
                 const data = res.data
                 if(data.code == 0) {
-                    const token = {
-                        id: data.id,
+                    let token = {
+                        name: data.user,
                         token: data.token
                     }
                     window.sessionStorage.setItem('tokenKey', JSON.stringify(token))
                     window.sessionStorage.setItem('username', data.user)              
-                    this.setState({
-                        msg: data.msg,
-                        isShowMsg:{
-                            isShow: true,
-                            msg: data.msg,
-                            type: 'success'
-                        }
-                    })
-                    setTimeout(() => {
-                        this.props.history.push('/home')
-                    }, 500)
+                    // setTimeout(() => {
+                    //     this.props.history.push('/home')
+                    // }, 500)
+                    token.code = data.code
+                    token.msg = data.msg
+                    this.props.logMsg(token)
                 }
             })
             .catch((err) =>{
@@ -106,10 +101,8 @@ class Login extends React.Component {
  
         return(
             <div className={mainContent}>
-                <div >
-                    <Msg msg={this.state.isShowMsg}/>
-                </div>
                 <div className={loginCss.loginCon}>
+                    <Icon name='remove' onClick={this.props.closeModel} style={{'float': 'right', 'cursor': 'pointer'}}/>
                     <p className={text}>
                         welcome, let's login!
                     </p>
@@ -118,9 +111,9 @@ class Login extends React.Component {
                         <Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
                         <Button color='brown' onClick={this.toLogin.bind(this)}>LOGIN IN</Button>
                     </div>
-                    <div className={linkText}>
-                        <Link to='/register'>to register ~</Link>  
-                    </div>
+                    {/* <div className={linkText}>
+                        <Link to='/register' className={mainCss.yellow}>to register ~</Link>  
+                    </div> */}
                 </div>
             </div>
         )

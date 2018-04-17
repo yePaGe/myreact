@@ -1,11 +1,11 @@
 import React from 'react';
-import homeCss from './home.scss';
-import mainCss from '../../assets/css/main.scss';
+import homeCss from './user.scss';
+import mainCss from '../../../assets/css/main.scss';
 import { Table, Icon, Button, Input } from 'semantic-ui-react';
 
 import { Link, History } from 'react-router-dom';
 
-import Msg from '../msg/Msg';
+import Msg from '../../msg/Msg';
 
 class Home extends React.Component {
     constructor(props) {
