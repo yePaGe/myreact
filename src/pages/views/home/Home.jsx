@@ -26,8 +26,8 @@ class Home extends React.Component {
             userList: [],
             searchKey: '',
             accountMsg: {
-                img: require('../../../assets/img/icon.png'),
-                name: window.sessionStorage.getItem('username')
+                img: '',
+                name: ''
             },
             
         }
@@ -37,17 +37,21 @@ class Home extends React.Component {
         if(!window.sessionStorage.tokenKey) {
             // this.props.history.push('/login')
             this.setState({
-                isShowAccount: false
+                isShowAccount: false,
             })
         }
         else {
             this.setState({
-                isShowAccount: true
+                isShowAccount: true,
+                accountMsg: {
+                    img: require('../../../assets/img/icon.png'),
+                    name: JSON.parse(window.sessionStorage.username).name
+                }
             })
         }
     }
     logout() {
-        const username = window.sessionStorage.username
+        const username = JSON.parse(window.sessionStorage.username).user
         React.axios('/server/logout', {
             params: {
                 user: username
@@ -163,23 +167,12 @@ class Home extends React.Component {
                     {/* <Input icon='search' placeholder='search ... ' size='mini' style={{'height': '40px'}}/> */}
                     {
                         this.state.isShowAccount
-                        ?   <Card>
-                                <Card.Content>
-                                    <Image floated='right' size='mini' src={this.state.accountMsg.img} />
-                                    <Card.Header>
-                                        {this.state.accountMsg.name}
-                                    </Card.Header>
-                                    <Card.Description>
-                                        登录有效期：<strong>best friends</strong>
-                                    </Card.Description>
-                                </Card.Content>
-                                <Card.Content extra>
-                                    <div className='ui two buttons'>
-                                    <Button basic color='green'>修改密码</Button>
-                                    <Button basic color='red' onClick={this.logout.bind(this)}>退出</Button>
-                                    </div>
-                                </Card.Content>
-                            </Card>
+                        ?   <div className={mainCss.flexPlay} style={{'width': '320px'}}>
+                                <p style={{'marginTop': '10px'}}>{this.state.accountMsg.name}</p>
+                                <img src={this.state.accountMsg.img} width='45px' height='45px'/>
+                                <Button basic color='green'>修改密码</Button>
+                                <Button basic color='red' onClick={this.logout.bind(this)}>退出</Button>
+                            </div>   
                         :   <div>
                                 <Button color='olive' onClick={this.toSign.bind(this, 0)}>登录</Button>
                                 <Modal
@@ -199,7 +192,7 @@ class Home extends React.Component {
                     }
                 </div>
                 <div className={homeCss.listContent}>
-                    <BaiduMap/>
+                    {/* <BaiduMap/> */}
                 </div>
             </div>
         )

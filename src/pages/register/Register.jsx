@@ -9,26 +9,33 @@ class Register extends React.Component {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            name: ''
         };
     }
     
     setForm(type, e) {
         if(e.icon === 'user') {
-            this.setState(prev => ({
+            this.setState({
                 username: e.value
-            }))
+            })
         }
         else if(e.icon === 'privacy') {
-            this.setState(prev => ({
+            this.setState({
                 password: e.value
-            }))
+            })
+        }
+        else if(e.icon === 'address book outline') {
+            this.setState({
+                name: e.value
+            })
         }
     }
 
     toRegister() {
-        let name = this.state.username
-        let passwd = this.state.password
+        const username = this.state.username
+        const passwd = this.state.password
+        const name = this.state.name
 
         if(name.length === 0) {
             alert('please enter your account!')
@@ -38,9 +45,14 @@ class Register extends React.Component {
             alert('please enter your password!')
             return
         }
+        else if(name.length === 0) {
+            alert('please enter your name!')
+            return
+        }
         React.axios.post('/server/users/add',{
-                username: name,
-                password: passwd
+                username: username,
+                password: passwd,
+                name: name
         })
             .then((res) =>{
                 console.log(res)
@@ -70,6 +82,7 @@ class Register extends React.Component {
                         welcome, let's register!
                     </p>
                     <div className={registerCss.formCon}>
+                        <Input icon='address book outline' iconPosition='left' placeholder='your name' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
                         <Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
                         <Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
                         <Button color='brown' onClick={this.toRegister.bind(this)}>REGISTER</Button>

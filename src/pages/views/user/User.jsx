@@ -1,13 +1,13 @@
 import React from 'react';
-import homeCss from './user.scss';
+import userCss from './user.scss';
 import mainCss from '../../../assets/css/main.scss';
-import { Table, Icon, Button, Input } from 'semantic-ui-react';
+import { Table, Icon, Button, Input, Tab } from 'semantic-ui-react';
 
 import { Link, History } from 'react-router-dom';
 
 import Msg from '../../msg/Msg';
 
-class Home extends React.Component {
+class User extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,12 +17,17 @@ class Home extends React.Component {
                 msg: ''
             },
             userList: [],
-            searchKey: ''
+            searchKey: '',
+            panes: [
+                { menuItem: 'Tab 1', render: () => <Tab.Pane attached={false}>Tab 1 Content</Tab.Pane> },
+                { menuItem: 'Tab 2', render: () => <Tab.Pane attached={false}>Tab 2 Content</Tab.Pane> },
+                { menuItem: 'Tab 3', render: () => <Tab.Pane attached={false}>Tab 3 Content</Tab.Pane> },
+            ]
         }
     }
     componentWillMount() {
         if(!window.sessionStorage.tokenKey) {
-            this.props.history.push('/login')
+            this.props.history.push('/home')
         }
         this.getUserList()
     }
@@ -161,20 +166,14 @@ class Home extends React.Component {
                 </Table.Row>
             )
         })
+
         return(
             <div className={mainCss.main}>
                 <div >
                     <Msg msg={this.state.isShowMsg}/>
                 </div>
-                <div className={homeCss.topBanner}>
-                    <Icon name='sign out' onClick={this.logout.bind(this)}/>
-                    <Input 
-                        icon={<Icon name='search' inverted circular link onClick={this.searchUser.bind(this, this.state.searchKey)}/>}
-                        placeholder='Search...' 
-                        value={this.state.searchKey}
-                        onChange={this.iptValue.bind(this)}/>
-                </div>
-                <div className={homeCss.listContent}>
+                {/* <Tab menu={{ secondary: true, pointing: true }} panes={this.state.panes} /> */}
+                <div>
                     <Table celled padded>
                         <Table.Header>
                             <Table.Row>
@@ -195,4 +194,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default User;

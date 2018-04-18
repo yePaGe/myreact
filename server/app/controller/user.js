@@ -60,6 +60,7 @@ class UserController extends Controller {
         this.ctx.body = {
           code: 0,
           msg: `${newuser.username} login successfully!`,
+          name: newuser.name,
           id: newuser.id,
         };
       }
@@ -92,6 +93,7 @@ class UserController extends Controller {
           code: 0,
           token: tokenKey.token,
           user: user.username,
+          name: user.name,
           msg: 'login successfully!',
         };
       } else {

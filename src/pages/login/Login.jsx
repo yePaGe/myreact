@@ -65,8 +65,12 @@ class Login extends React.Component {
                         name: data.user,
                         token: data.token
                     }
+                    const adname = {
+                        user: data.user,
+                        name: data.name
+                    }
                     window.sessionStorage.setItem('tokenKey', JSON.stringify(token))
-                    window.sessionStorage.setItem('username', data.user)              
+                    window.sessionStorage.setItem('username', JSON.stringify(adname))            
                     // setTimeout(() => {
                     //     this.props.history.push('/home')
                     // }, 500)

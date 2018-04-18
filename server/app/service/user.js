@@ -29,6 +29,7 @@ class UserService extends Service {
         const nowDate = new Date();
         const newuser = await this.ctx.model.User.create({
             username: user.username,
+            name: user.name,
             password: user.password,
             islogin: false,
             createDate: nowDate,

@@ -15,6 +15,10 @@ $font-color: #000080;
   font-size: 20px;
   font-weight: bolder;
 }
+.flexPlay{
+  display: flex;
+  justify-content: space-between;
+}
 .mt{
   margin-top: 20px; 
 }
