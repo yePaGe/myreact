@@ -1,61 +1,67 @@
 import React from 'react';
 import userCss from './user.scss';
 import mainCss from '../../../assets/css/main.scss';
-import { Table, Icon, Button, Input, Tab } from 'semantic-ui-react';
+
+import { Tabs } from 'element-react';
 
 import { Link, History } from 'react-router-dom';
-
-import Msg from '../../msg/Msg';
 
 class User extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isShowMsg: {
-                isShow: false,
-                type: 'success',
-                msg: ''
-            },
-            userList: [],
             searchKey: '',
-            panes: [
-                { menuItem: 'Tab 1', render: () => <Tab.Pane attached={false}>Tab 1 Content</Tab.Pane> },
-                { menuItem: 'Tab 2', render: () => <Tab.Pane attached={false}>Tab 2 Content</Tab.Pane> },
-                { menuItem: 'Tab 3', render: () => <Tab.Pane attached={false}>Tab 3 Content</Tab.Pane> },
+            columns: [
+                {
+                    prop: 'tokenId',
+                    label: 'Token ID'
+                },
+                {
+                    prop: 'username',
+                    label: '用户名'
+                },
+                {
+                    prop: 'createDate',
+                    label: '创建时间'
+                },
+                {
+                    prop: 'lastLogin',
+                    label: '最后登录时间'
+                },
+                {
+                    prop: 'edit',
+                    label: '编辑',
+                    render: () => {
+                        return <span>
+                            <ui.Button icon='delete' type='danger'></ui.Button>
+                        </span>
+                    }
+                }
+            ],
+            userList: [
+                {
+                    tokenId: '12313asdsadfas',
+                    username: 'aaa',
+                    createDate: '2018-3-4',
+                    lastLogin: '2018-4-5',
+                    edit: 'del'
+                }
             ]
         }
     }
     componentWillMount() {
-        if(!window.sessionStorage.tokenKey) {
-            this.props.history.push('/home')
-        }
-        this.getUserList()
+        // if(!window.sessionStorage.tokenKey) {
+        //     this.props.history.push('/home')
+        //     return
+        // }
     }
-    logout() {
-        const username = window.sessionStorage.username
-        React.axios('/server/logout', {
-            params: {
-                user: username
-            }
-        }).then((res) => {
-            this.setState({
-                isShowMsg:{
-                    isShow: true,
-                    msg: res.data.msg,
-                    type: res.data.code == 0 ? 'success' : 'error'
-                }
-            })
-            window.sessionStorage.removeItem('tokenKey')
-            window.sessionStorage.removeItem('username')
-            setTimeout(() => {
-                this.props.history.push('/login')
-            }, 1000)
-        })
+    componentDidMount() {
+        this.getUserList()       
     }
     getUserList() {
         React.axios('/server/users/list').then((res) => {
             if(!res.data.code) {
-                const curName = window.sessionStorage.getItem('username')
+                const curName = JSON.parse(window.sessionStorage.username).user
                 let list = res.data.list.map((i) => {
                     if(i.username == curName) {
                         i.isCur = true
@@ -78,22 +84,6 @@ class User extends React.Component {
             }
         }).then((res) => {
             const data = res.data
-            this.setState({
-                isShowMsg:{
-                    isShow: true,
-                    msg: res.data.msg,
-                    type: res.data.code == 0 ? 'success' : 'error'
-                }
-            })
-            setTimeout(() => {
-                this.setState({
-                    isShowMsg:{
-                        isShow: false,
-                        msg: '',
-                        type: 'success'
-                    }
-                })
-            }, 1000)
             this.getUserList()
         })
     }
@@ -121,22 +111,6 @@ class User extends React.Component {
                 })
             }
             else {
-                this.setState({
-                    isShowMsg:{
-                        isShow: true,
-                        msg: res.data.msg,
-                        type: res.data.code == 0 ? 'success' : 'error'
-                    }
-                })
-                setTimeout(() => {
-                    this.setState({
-                        isShowMsg:{
-                            isShow: false,
-                            msg: '',
-                            type: 'success'
-                        }
-                    })
-                }, 1000)
             }
         })
     }
@@ -146,49 +120,31 @@ class User extends React.Component {
             searchKey: e.target.value
         })
     }
+    backHome() {
+        this.props.history.push('/home')
+    }
 
     render() {
-        const userList = []
-        this.state.userList.forEach((item) => {
-            userList.push(
-                <Table.Row key={item._id}>
-                    <Table.Cell>{item.username}</Table.Cell>
-                    <Table.Cell>{item.createDate}</Table.Cell>
-                    <Table.Cell>{item.lastLogin}</Table.Cell>
-                    <Table.Cell>{item.tokenId}</Table.Cell>
-                    <Table.Cell>
-                        { item.isCur 
-                            ? <Button disabled>当前用户</Button>
-                            : <Button onClick={this.toDel.bind(this, item._id)}>删除</Button>
-                        }
-                        
-                    </Table.Cell>
-                </Table.Row>
-            )
-        })
-
         return(
             <div className={mainCss.main}>
-                <div >
-                    <Msg msg={this.state.isShowMsg}/>
-                </div>
-                {/* <Tab menu={{ secondary: true, pointing: true }} panes={this.state.panes} /> */}
+                <ui.Button color='olive' onClick={this.backHome.bind(this)}>返回首页</ui.Button>
                 <div>
-                    <Table celled padded>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>username</Table.HeaderCell>
-                                <Table.HeaderCell>createDate</Table.HeaderCell>
-                                <Table.HeaderCell>lastLogin</Table.HeaderCell>
-                                <Table.HeaderCell>tokenId</Table.HeaderCell>
-                                <Table.HeaderCell>edit</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {userList}
-                        </Table.Body>
-                    </Table>
+                    {/* <Tabs type="card" value="1">
+                        <Tabs.Pane label="用户管理" name="1">用户管理</Tabs.Pane>
+                        <Tabs.Pane label="配置管理" name="2">配置管理</Tabs.Pane>
+                        <Tabs.Pane label="角色管理" name="3">角色管理</Tabs.Pane>
+                        <Tabs.Pane label="定时补偿任务" name="4">定时补偿任务</Tabs.Pane>
+                    </Tabs> */}
                 </div>
+                <div>
+                    <ui.Table
+                        style={{width: '100%'}}
+                        columns={this.state.columns}
+                        maxHeight={200}
+                        data={this.state.userList}
+                    />
+                </div>
+                hello 傻子~
             </div>
         )
     }

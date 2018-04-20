@@ -2,13 +2,10 @@ import React from 'react';
 import homeCss from './home.scss';
 import mainCss from '../../../assets/css/main.scss';
 
-import { Table, Icon, Button, Input, Card, Image, Modal } from 'semantic-ui-react';
-
 import { Link, History } from 'react-router-dom';
 
 import Login from '../../login/Login';
 import Regi from '../../register/Register';
-import Msg from '../../msg/Msg';
 import BaiduMap from '../map/Baidumap';
 
 class Home extends React.Component {
@@ -17,19 +14,13 @@ class Home extends React.Component {
         this.state = {
             loginOpen: false,
             regiOpen: false,
-            isShowMsg: {
-                isShow: false,
-                type: 'success',
-                msg: ''
-            },
             isShowAccount: false,
             userList: [],
             searchKey: '',
             accountMsg: {
                 img: '',
                 name: ''
-            },
-            
+            }        
         }
     }
     componentWillMount() {
@@ -57,13 +48,6 @@ class Home extends React.Component {
                 user: username
             }
         }).then((res) => {
-            this.setState({
-                isShowMsg:{
-                    isShow: true,
-                    msg: res.data.msg,
-                    type: res.data.code == 0 ? 'success' : 'error'
-                }
-            })
             window.sessionStorage.removeItem('tokenKey')
             window.sessionStorage.removeItem('username')
             this.setState({
@@ -74,13 +58,6 @@ class Home extends React.Component {
                 // this.props.history.push('/login')
             //     })
             // }, 1000)
-            setTimeout(() => {
-                this.setState({
-                    isShowMsg:{
-                        isShow: false
-                    } 
-                })
-            }, 1500)
         })
     }
     toSign(type) {
@@ -96,7 +73,6 @@ class Home extends React.Component {
         }
     }
     closeModel(type) {
-        console.log(type)
         if(!type) {
             this.setState({
                 loginOpen: false
@@ -112,82 +88,74 @@ class Home extends React.Component {
         this.setState({
             loginOpen: false
         })
-        console.log(event)
         if(event.token) {
             this.setState({
-                isShowMsg:{
-                    isShow: true,
-                    msg: event.msg,
-                    type: event.code == 0 ? 'success' : 'error'
-                },
-                isShowAccount: true
+                isShowAccount: true,
+                accountMsg: {
+                    img: require('../../../assets/img/icon.png'),
+                    name: JSON.parse(window.sessionStorage.username).name
+                }
             })
-            setTimeout(() => {
-                this.setState({
-                    isShowMsg:{
-                        isShow: false
-                    }
-                })
-            }, 1500)
         }
     }
     getRegiMsg(event) {
-        console.log(event)
         this.setState({
-            isShowMsg:{
-                isShow: true,
-                msg: event.data.msg,
-                type: event.data.code == 0 ? 'success' : 'error'
-            },
             regiOpen: false
         })
-        setTimeout(() => {
-            this.setState({
-                isShowMsg:{
-                    isShow: false
-                }
-            })
-        }, 1500)
     }
     iptValue(e) {
-        console.log(e.target.value)
         this.setState({
             searchKey: e.target.value
         })
+    }
+    toEdit() {
+        this.props.history.push('/user')
     }
 
     render() {
         return(
             <div className={mainCss.main}>
-                <div >
-                    <Msg msg={this.state.isShowMsg}/>
-                </div>
                 <div className={homeCss.topBanner}>
                     <div className={homeCss.titleName}>PERSONAL DESIGN</div>
                     {/* <Input icon='search' placeholder='search ... ' size='mini' style={{'height': '40px'}}/> */}
                     {
                         this.state.isShowAccount
                         ?   <div className={mainCss.flexPlay} style={{'width': '320px'}}>
-                                <p style={{'marginTop': '10px'}}>{this.state.accountMsg.name}</p>
+                                <p style={{'marginTop': '10px'}}>hello, {this.state.accountMsg.name}</p>
                                 <img src={this.state.accountMsg.img} width='45px' height='45px'/>
-                                <Button basic color='green'>修改密码</Button>
-                                <Button basic color='red' onClick={this.logout.bind(this)}>退出</Button>
+                                <ui.Button basic color='green' onClick={this.toEdit.bind(this)}>修改信息</ui.Button>
+                                <ui.Button basic color='red' onClick={this.logout.bind(this)}>退出</ui.Button>
                             </div>   
                         :   <div>
-                                <Button color='olive' onClick={this.toSign.bind(this, 0)}>登录</Button>
-                                <Modal
+                                <ui.Button type='primary' onClick={this.toSign.bind(this, 0)}>登录</ui.Button>
+                                {/* <ui.Dialog
+                                    title="提示"
+                                    size="tiny"
+                                    visible={ this.state.loginOpen }
+                                    onCancel={ () => this.setState({ loginOpen: false }) }
+                                    lockScroll={ false }
+                                > */}
+                                    {/* <ui.Dialog.Body>
+                                    <span>这是一段信息</span>
+                                    </ui.Dialog.Body>
+                                    <ui.Dialog.Footer className="dialog-footer">
+                                    <ui.Button onClick={ () => this.setState({ loginOpen: false }) }>取消</ui.Button>
+                                    <ui.Button type="primary" onClick={ () => this.setState({ loginOpen: false }) }>确定</ui.Button>
+                                    </ui.Dialog.Footer> */}
+                                {/* </ui.Dialog> */}
+                                {/* <ui.Modal
                                     open={this.state.loginOpen}
                                     basic
                                     size='small'>
                                     <Login logMsg={this.getLoginMsg.bind(this)} closeModel={this.closeModel.bind(this, 0)}/>
-                                </Modal>
-                                <Button basic color='yellow' onClick={this.toSign.bind(this,1)}>注册</Button>
-                                <Modal
+                                </ui.Modal> */}
+                                <ui.Button type='warning' onClick={this.toSign.bind(this,1)}>注册</ui.Button>
+                                {/* <ui.Modal
                                     open={this.state.regiOpen}
                                     basic
                                     size='small'>
                                     <Regi logMsg={this.getRegiMsg.bind(this)} closeModel={this.closeModel.bind(this, 1)}/>
-                                </Modal>
+                                </ui.Modal> */}
                             </div>
                     }
                 </div>

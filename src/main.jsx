@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'semantic-ui-css/semantic.min.css';
+import 'element-theme-default';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import Routes from './router';
-const ui = require('semantic-ui-react');
+const ui = require('element-react');
 
 React.axios = axios;
 window.ui = ui

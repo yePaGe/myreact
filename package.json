@@ -14,11 +14,11 @@
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
+    "element-react": "^1.4.15",
+    "element-theme-default": "^1.4.13",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
-    "semantic-ui-css": "^2.2.14",
-    "semantic-ui-react": "^0.77.2",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
