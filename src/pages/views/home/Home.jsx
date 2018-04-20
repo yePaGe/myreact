@@ -3,7 +3,7 @@ import homeCss from './home.scss';
 import mainCss from '../../../assets/css/main.scss';
 
 import { Link, History } from 'react-router-dom';
-
+import 'element-theme-default';
 import Login from '../../login/Login';
 import Regi from '../../register/Register';
 import BaiduMap from '../map/Baidumap';
@@ -12,8 +12,8 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            dialogOpen: false,
             loginOpen: false,
-            regiOpen: false,
             isShowAccount: false,
             userList: [],
             searchKey: '',
@@ -61,47 +61,35 @@ class Home extends React.Component {
         })
     }
     toSign(type) {
+        this.setState({
+            dialogOpen: true,
+            loginOpen: type == 1 ? false : true 
+        })
+    }
+    getSignMsg(event, type) {
+        this.setState({
+            dialogOpen: false
+        })
         if(!type) {
-            this.setState({
-                loginOpen: true
-            })
+            if(event.token) {
+                this.setState({
+                    isShowAccount: true,
+                    accountMsg: {
+                        img: require('../../../assets/img/icon.png'),
+                        name: JSON.parse(window.sessionStorage.username).name
+                    }
+                })
+            }
         }
         else {
-            this.setState({
-                regiOpen: true
-            })
+
         }
     }
-    closeModel(type) {
-        if(!type) {
-            this.setState({
-                loginOpen: false
-            })
-        }
-        else {
-            this.setState({
-                regiOpen: false
-            })
-        }
-    }
-    getLoginMsg(event) {
+    changeSign(type) {
         this.setState({
-            loginOpen: false
+            loginOpen: type == 1 ? true : false
         })
-        if(event.token) {
-            this.setState({
-                isShowAccount: true,
-                accountMsg: {
-                    img: require('../../../assets/img/icon.png'),
-                    name: JSON.parse(window.sessionStorage.username).name
-                }
-            })
-        }
-    }
-    getRegiMsg(event) {
-        this.setState({
-            regiOpen: false
-        })
+        console.log('aaaaaaaaa',type, this.state.loginOpen)
     }
     iptValue(e) {
         this.setState({
@@ -128,34 +116,21 @@ class Home extends React.Component {
                             </div>   
                         :   <div>
                                 <ui.Button type='primary' onClick={this.toSign.bind(this, 0)}>登录</ui.Button>
-                                {/* <ui.Dialog
-                                    title="提示"
+                                <ui.Button type='warning' onClick={this.toSign.bind(this, 1)}>注册</ui.Button>
+                                <ui.Dialog
+                                    className={homeCss['dialog-bg']}
                                     size="tiny"
-                                    visible={ this.state.loginOpen }
-                                    onCancel={ () => this.setState({ loginOpen: false }) }
-                                    lockScroll={ false }
-                                > */}
-                                    {/* <ui.Dialog.Body>
-                                    <span>这是一段信息</span>
+                                    visible={ this.state.dialogOpen }
+                                    onCancel={ () => this.setState({ dialogOpen: false }) }
+                                    lockScroll={ false }>
+                                    <ui.Dialog.Body>
+                                        {
+                                            this.state.loginOpen 
+                                            ?   <Login logMsg={this.getSignMsg.bind(this, 0)} toChange={this.changeSign.bind(this)}/>
+                                            :   <Regi logMsg={this.getSignMsg.bind(this, 1)} toChange={this.changeSign.bind(this)}/>
+                                        }
                                     </ui.Dialog.Body>
-                                    <ui.Dialog.Footer className="dialog-footer">
-                                    <ui.Button onClick={ () => this.setState({ loginOpen: false }) }>取消</ui.Button>
-                                    <ui.Button type="primary" onClick={ () => this.setState({ loginOpen: false }) }>确定</ui.Button>
-                                    </ui.Dialog.Footer> */}
-                                {/* </ui.Dialog> */}
-                                {/* <ui.Modal
-                                    open={this.state.loginOpen}
-                                    basic
-                                    size='small'>
-                                    <Login logMsg={this.getLoginMsg.bind(this)} closeModel={this.closeModel.bind(this, 0)}/>
-                                </ui.Modal> */}
-                                <ui.Button type='warning' onClick={this.toSign.bind(this,1)}>注册</ui.Button>
-                                {/* <ui.Modal
-                                    open={this.state.regiOpen}
-                                    basic
-                                    size='small'>
-                                    <Regi logMsg={this.getRegiMsg.bind(this)} closeModel={this.closeModel.bind(this, 1)}/>
-                                </ui.Modal> */}
+                                </ui.Dialog>
                             </div>
                     }
                 </div>

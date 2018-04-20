@@ -2,8 +2,6 @@ import React from 'react';
 import userCss from './user.scss';
 import mainCss from '../../../assets/css/main.scss';
 
-import { Tabs } from 'element-react';
-
 import { Link, History } from 'react-router-dom';
 
 class User extends React.Component {
@@ -129,12 +127,12 @@ class User extends React.Component {
             <div className={mainCss.main}>
                 <ui.Button color='olive' onClick={this.backHome.bind(this)}>返回首页</ui.Button>
                 <div>
-                    {/* <Tabs type="card" value="1">
-                        <Tabs.Pane label="用户管理" name="1">用户管理</Tabs.Pane>
-                        <Tabs.Pane label="配置管理" name="2">配置管理</Tabs.Pane>
-                        <Tabs.Pane label="角色管理" name="3">角色管理</Tabs.Pane>
-                        <Tabs.Pane label="定时补偿任务" name="4">定时补偿任务</Tabs.Pane>
-                    </Tabs> */}
+                    <ui.Tabs type="card" value="1">
+                        <ui.Tabs.Pane label="用户管理" name="1">用户管理</ui.Tabs.Pane>
+                        <ui.Tabs.Pane label="配置管理" name="2">配置管理</ui.Tabs.Pane>
+                        <ui.Tabs.Pane label="角色管理" name="3">角色管理</ui.Tabs.Pane>
+                        <ui.Tabs.Pane label="定时补偿任务" name="4">定时补偿任务</ui.Tabs.Pane>
+                    </ui.Tabs>
                 </div>
                 <div>
                     <ui.Table

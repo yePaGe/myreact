@@ -78,6 +78,9 @@ class Login extends React.Component {
             this.toLogin()
         }
     }
+    toChange() {
+        this.props.toChange(0)
+    }
 
     componentDidMount() {
      
@@ -100,9 +103,10 @@ class Login extends React.Component {
                         welcome, let's login!
                     </p>
                     <div className={loginCss.formCon}>
-                        <ui.Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
-                        <ui.Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
-                        <ui.Button color='brown' onClick={this.toLogin.bind(this)}>LOGIN IN</ui.Button>
+                        <ui.Input icon='user' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input icon='privacy' type='password' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Button type='warning' onClick={this.toLogin.bind(this)}>LOGIN IN</ui.Button>
+                        <ui.Button type='text' onClick={this.toChange.bind(this)}>未有帐号，去注册~~~</ui.Button>
                     </div>
                 </div>
             </div>

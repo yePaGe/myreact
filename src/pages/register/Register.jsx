@@ -61,7 +61,9 @@ class Register extends React.Component {
                 console.log(err)
             })
     }
-
+    toChange() {
+        this.props.toChange(1)
+    }
     handleEnter(event) {
         if(event.keyCode == 13) {
             this.toRegister()
@@ -75,20 +77,18 @@ class Register extends React.Component {
 
         return(
             <div className={mainCss.main}>
-                <div className={registerCss.loginCon}>
+                <div className={registerCss.regiCon}>
                     <ui.Icon name='remove' onClick={this.props.closeModel} style={{'float': 'right', 'cursor': 'pointer'}}/>
                     <p className={text}>
                         welcome, let's register!
                     </p>
                     <div className={registerCss.formCon}>
-                        <ui.Input icon='address book outline' iconPosition='left' placeholder='your name' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
-                        <ui.Input icon='user' iconPosition='left' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
-                        <ui.Input icon='privacy' type='password' iconPosition='left' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
-                        <ui.Button color='brown' onClick={this.toRegister.bind(this)}>REGISTER</ui.Button>
+                        <ui.Input icon='address book outline' placeholder='your name' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input icon='user' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input icon='privacy' type='password' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Button type='warning' onClick={this.toRegister.bind(this)}>REGISTER</ui.Button>
+                        <ui.Button type='text' onClick={this.toChange.bind(this)}>已有帐号，去登陆~~</ui.Button>
                     </div>
-                    {/* <div className={linkText}>
-                        <Link to='/login' className={mainCss.yellow}>Back to Login!</Link>
-                    </div> */}
                 </div>
             </div>
         )
