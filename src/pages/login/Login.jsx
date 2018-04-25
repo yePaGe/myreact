@@ -22,14 +22,14 @@ class Login extends React.Component {
     }
     
     setForm(type, e) {
-        if(e.icon === 'user') {
+        if(type == 1) {
             this.setState(prev => ({
-                username: e.value
+                username: e
             }))
         }
-        else if(e.icon === 'privacy') {
+        else if(type == 2) {
             this.setState(prev => ({
-                password: e.value
+                password: e
             }))
         }
     }
@@ -39,11 +39,11 @@ class Login extends React.Component {
         let passwd = this.state.password
 
         if(name.length === 0) {
-            alert('please enter your account!')
+            ui.Message.error('please enter your account!')
             return
         }
         else if(passwd.length === 0) {
-            alert('please enter your password!')
+            ui.Message.error('please enter your password!')
             return
         }
         React.axios.post('/server/login',{
@@ -52,19 +52,17 @@ class Login extends React.Component {
         })
             .then((res) =>{
                 const data = res.data
+                ui.Message({
+                    type: data.code == 0 ? 'success' : 'error',
+                    message: data.msg
+                })
                 if(data.code == 0) {
                     let token = {
                         name: data.user,
+                        email: data.email,
                         token: data.token
                     }
-                    const adname = {
-                        user: data.user,
-                        name: data.name
-                    }
                     window.sessionStorage.setItem('tokenKey', JSON.stringify(token))
-                    window.sessionStorage.setItem('username', JSON.stringify(adname))            
-                    token.code = data.code
-                    token.msg = data.msg
                     this.props.logMsg(token)
                 }
             })
@@ -81,14 +79,6 @@ class Login extends React.Component {
     toChange() {
         this.props.toChange(0)
     }
-
-    componentDidMount() {
-     
-    }
-    
-    componentWillUnmount() {
-    }
-    
     render() {
         const text = `${mainCss.textCenter} ${mainCss.textFont}`;
         const timer = `${mainCss.textCenter} ${loginCss.timer}`;
@@ -98,13 +88,12 @@ class Login extends React.Component {
         return(
             <div className={mainContent}>
                 <div className={loginCss.loginCon}>
-                    <ui.Icon name='remove' onClick={this.props.closeModel} style={{'float': 'right', 'cursor': 'pointer'}}/>
                     <p className={text}>
                         welcome, let's login!
                     </p>
                     <div className={loginCss.formCon}>
-                        <ui.Input icon='user' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
-                        <ui.Input icon='privacy' type='password' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input placeholder='your account' onChange={this.setForm.bind(this, 1)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input type='password' placeholder='your password' onChange={this.setForm.bind(this, 2)} onKeyUp={this.handleEnter.bind(this)}/>
                         <ui.Button type='warning' onClick={this.toLogin.bind(this)}>LOGIN IN</ui.Button>
                         <ui.Button type='text' onClick={this.toChange.bind(this)}>未有帐号，去注册~~~</ui.Button>
                     </div>

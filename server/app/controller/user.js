@@ -59,7 +59,7 @@ class UserController extends Controller {
       } else {
         this.ctx.body = {
           code: 0,
-          msg: `${newuser.username} login successfully!`,
+          msg: `${newuser.username} register successfully!`,
           name: newuser.name,
           id: newuser.id,
         };
@@ -93,7 +93,7 @@ class UserController extends Controller {
           code: 0,
           token: tokenKey.token,
           user: user.username,
-          name: user.name,
+          email: user.email,
           msg: 'login successfully!',
         };
       } else {

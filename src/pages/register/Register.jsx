@@ -9,24 +9,24 @@ class Register extends React.Component {
         this.state = {
             username: '',
             password: '',
-            name: ''
+            email: ''
         };
     }
     
     setForm(type, e) {
-        if(e.icon === 'user') {
+        if(type == 1) {
             this.setState({
-                username: e.value
+                username: e
             })
         }
-        else if(e.icon === 'privacy') {
+        else if(type == 2) {
             this.setState({
-                password: e.value
+                email: e
             })
         }
-        else if(e.icon === 'address book outline') {
+        else if(type == 3) {
             this.setState({
-                name: e.value
+                password: e
             })
         }
     }
@@ -34,31 +34,47 @@ class Register extends React.Component {
     toRegister() {
         const username = this.state.username
         const passwd = this.state.password
-        const name = this.state.name
-
-        if(name.length === 0) {
-            alert('please enter your account!')
+        const email = this.state.email
+        const emailSize = /^[A-Za-z0-9]+@[a-z0-9]+.[a-z]{2,5}$/
+        if(username.length === 0) {
+            ui.Message.error('please enter your account!')
             return
         }
-        else if(passwd.length === 0) {
-            alert('please enter your password!')
+        if(email.length === 0) {
+            ui.Message.error('please enter your email!')
             return
         }
-        else if(name.length === 0) {
-            alert('please enter your name!')
+        if(emailSize.test(email) == false) {
+            ui.Message.error('please enter correct email!')
+            return
+        }
+        if(passwd.length === 0) {
+            ui.Message.error('please enter your password!')
             return
         }
         React.axios.post('/server/users/add',{
                 username: username,
                 password: passwd,
-                name: name
-        })
-            .then((res) =>{
-                console.log(res)
-                this.props.logMsg(res)
+                email: email
+        }).then((res) =>{
+                ui.Message({
+                    type: !res.data.code ? 'success' : 'error',
+                    message: res.data.msg
+                })
+                if(res.data.code != 0) {
+                    this.setState({
+                        username: '',
+                        password: '',
+                        email: ''
+                    })
+                }
+                else {
+                    this.props.logMsg(res.data.code)
+                }
             })
             .catch((err) =>{
                 console.log(err)
+                ui.Message.error(err)
             })
     }
     toChange() {
@@ -78,14 +94,13 @@ class Register extends React.Component {
         return(
             <div className={mainCss.main}>
                 <div className={registerCss.regiCon}>
-                    <ui.Icon name='remove' onClick={this.props.closeModel} style={{'float': 'right', 'cursor': 'pointer'}}/>
                     <p className={text}>
                         welcome, let's register!
                     </p>
                     <div className={registerCss.formCon}>
-                        <ui.Input icon='address book outline' placeholder='your name' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
-                        <ui.Input icon='user' placeholder='your account' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
-                        <ui.Input icon='privacy' type='password' placeholder='your password' onChange={this.setForm.bind(this)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input placeholder='your name' onChange={this.setForm.bind(this, 1)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input placeholder='your email account' onChange={this.setForm.bind(this, 2)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input type='password' placeholder='your password' onChange={this.setForm.bind(this, 3)} onKeyUp={this.handleEnter.bind(this)}/>
                         <ui.Button type='warning' onClick={this.toRegister.bind(this)}>REGISTER</ui.Button>
                         <ui.Button type='text' onClick={this.toChange.bind(this)}>已有帐号，去登陆~~</ui.Button>
                     </div>

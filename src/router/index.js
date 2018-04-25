@@ -3,7 +3,6 @@ import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import Home from '../pages/views/home/Home';
 import User from '../pages/views/user/User';
-import mainCss from '../assets/css/main.scss';
 import { History } from 'react-router';
 
 class App extends React.Component{
@@ -64,7 +63,7 @@ class App extends React.Component{
 
     render() {
         return (
-            <div className={mainCss.container}>
+            <div>
                 <Switch>
                     <Route path='/home' component={Home}></Route>
                     <Route path='/user' component={User}></Route>
