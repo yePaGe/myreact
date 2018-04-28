@@ -1,14 +1,15 @@
 'use strict';
 
 const Service = require('egg').Service;
+const { formateDate } = require('../uitls/formateDate');
 
 class UserService extends Service {
     async getList() {
         const list = await this.ctx.model.User.find({})
         return list;
     }
-    async findOne(username, id) {
-        if(id) {
+    async findOne(email, id) {
+        if(email == 'undefined' && id) {
             const user = await this.ctx.model.User.findOne({
                 _id: id
             });
@@ -16,7 +17,7 @@ class UserService extends Service {
         }
         else {
             const user = await this.ctx.model.User.findOne({
-                username: username
+                email: email
             });
             return user;
         }
@@ -26,10 +27,11 @@ class UserService extends Service {
         return update;
     }  
     async create(user) {
-        const nowDate = new Date();
+        const nowDate = formateDate(0)
         const newuser = await this.ctx.model.User.create({
             username: user.username,
-            name: user.name,
+            email: user.email,
+            logo: '',
             password: user.password,
             islogin: false,
             createDate: nowDate,

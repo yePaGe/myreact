@@ -4,6 +4,7 @@ module.exports = app => {
     const mongoose = app.mongoose;
     const UserSchema = new mongoose.Schema({
         username: { type: String },
+        logo: { type: String },
         email: { type: String },
         password: { type: String },
         islogin: { type: Boolean },

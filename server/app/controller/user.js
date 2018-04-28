@@ -1,6 +1,7 @@
 'use strict';
 const Controller = require('egg').Controller;
 const crypto = require('crypto');
+const { formateDate } = require('../uitls/formateDate');
 
 class UserController extends Controller {
   async islogin() {
@@ -45,7 +46,7 @@ class UserController extends Controller {
 
   async register() {
     const data = this.ctx.request.body;
-    const user = await this.service.user.findOne(data.username);
+    const user = await this.service.user.findOne(data.user);
     if (!user) {
       let md5 =  crypto.createHash('md5');
       md5.update(data.password);
@@ -60,8 +61,6 @@ class UserController extends Controller {
         this.ctx.body = {
           code: 0,
           msg: `${newuser.username} register successfully!`,
-          name: newuser.name,
-          id: newuser.id,
         };
       }
     } else {
@@ -77,7 +76,7 @@ class UserController extends Controller {
     let md5 =  crypto.createHash('md5');
     md5.update(data.password);
     let pwd = md5.digest('hex');
-    const user = await this.service.user.findOne(data.username);
+    const user = await this.service.user.findOne(data.email);
     if (!user) {
       this.ctx.body = {
         code: 2,
@@ -85,7 +84,7 @@ class UserController extends Controller {
       };
     } else {
       if (user.password === pwd) {
-        const loginDate = new Date();
+        const loginDate = formateDate(0);
         const tokenKey = await this.service.token.createToken(user);
         await this.service.user.update(user.id, { islogin: true, lastLogin: loginDate, tokenId: tokenKey._id });
         this.ctx.cookies.set('tokenKey', tokenKey.token);
@@ -106,8 +105,8 @@ class UserController extends Controller {
   }
 
   async logout() {
-    const username = this.ctx.request.query.user;
-    const user = await this.service.user.findOne(username)
+    const email = this.ctx.request.query.email;
+    const user = await this.service.user.findOne(email)
     if(!user) {
       this.ctx.body = {
         code: 1,
@@ -158,8 +157,9 @@ class UserController extends Controller {
   }
 
   async searchUser() {
-    const key = this.ctx.request.query.key
-    const res = await this.service.user.findOne(key)
+    const id = this.ctx.request.query.id;
+    const email = this.ctx.request.query.email
+    const res = await this.service.user.findOne(email, id)
     let list =[]
     if(!res) {
       this.ctx.body = {
@@ -168,9 +168,10 @@ class UserController extends Controller {
       }
     }
     else {
+      list.push(res)
       this.ctx.body = {
         code: 0,
-        list: list.push(res)
+        list: list
       }
     }
   }

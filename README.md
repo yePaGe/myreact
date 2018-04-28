@@ -21,3 +21,26 @@
 
 ## 客户端
 1. 进入myreact文件夹， 'cnpm run start';
+
+#vscode 调试 node 配置文件内容
+"version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Egg",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "npm",
+            "windows": {
+                "runtimeExecutable": "npm.cmd"
+            },
+            "runtimeArgs": [
+                "run",
+                "debug"
+            ],
+            "console": "integratedTerminal",
+            "protocol": "auto",
+            "restart": true,
+            "port": 9999
+        }
+    ]

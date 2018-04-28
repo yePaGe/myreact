@@ -13,18 +13,19 @@ class Home extends React.Component {
                   
         }
     }
-    componentWillMount() {
-
+    componentDidMount() {
+        console.log(this.props)
+        this.refs.carStyle.changeCarousel(2)
     }
-
+    toEdit() {
+        this.props.history.push('/user')
+    }
     render() {
 
         return(
             <div className={mainCss.main}>
-                <div className={homeCss.carousel}>
-                    <Top/>
-                    <div className={mainCss.container}></div>
-                </div>
+                <Top ref='carStyle' toEdit={this.toEdit.bind(this)}/>
+                <div className={mainCss.container}></div>
             </div>
         )
     }

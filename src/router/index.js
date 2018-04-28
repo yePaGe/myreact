@@ -11,7 +11,7 @@ class App extends React.Component{
         let tokenKey = !window.sessionStorage.getItem('tokenKey') ? '' : JSON.parse(window.sessionStorage.getItem('tokenKey'))
         React.axios.get('/server/islogin',{
             params:{
-                key: tokenKey.token,
+                key: tokenKey.token
             }
         }).then((res) => {
             const data = res.data   

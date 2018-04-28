@@ -19,12 +19,12 @@ class Top extends React.Component {
                 name: ''
             },
             topLogo: require('../../assets/img/y-logo.png'),
+            carouselStyle: ''
         }
     }
     componentWillMount() {
         // 未登录不显示用户信息
         if(!window.sessionStorage.tokenKey) {
-            // this.props.history.push('/login')
             this.setState({
                 isShowAccount: false,
             })
@@ -51,6 +51,7 @@ class Top extends React.Component {
             this.setState({
                 isShowAccount: false
             })
+            window.location.reload()
         })
     }
     toSign(type) {
@@ -71,10 +72,17 @@ class Top extends React.Component {
             })
         }
         else if(type == 1) {
-            this.setState({
-                loginOpen: true
-            })
-            ui.Message.success('请登录新账号~~~')
+            if(event == 1) {
+                this.setState({
+                    dialogOpen: false
+                })
+            }
+            else {
+                this.setState({
+                    loginOpen: true
+                })
+                ui.Message.success('注册成功，请登录新账号~~~')
+            }
         }
     }
     changeSign(type) {
@@ -83,52 +91,63 @@ class Top extends React.Component {
         })
     }
     toEdit() {
-
+        this.props.toEdit()
     }
-
+    changeCarousel(type) {
+        if(type == 1) {
+            this.setState({
+                carouselStyle: `${topCss.carousel} ${topCss['car-hide']}`
+            })
+        }
+        else if(type == 2) {
+            this.setState({
+                carouselStyle: `${topCss.carousel} ${topCss['car-show']}`
+            })
+        }
+    }
     render() {
         const tips = `${mainCss.mr20} ${mainCss.gray}`
         return(
-            <div className={topCss.topBanner}>
-                <div className={topCss.titleName}>
-                    <img src={this.state.topLogo} width='50px' height='50px'/>
-                    PERSONAL
+            <div className={this.state.carouselStyle}>
+                <div className={topCss.topBanner}>
+                    <div className={topCss.titleName}>
+                        <img src={this.state.topLogo} width='50px' height='50px'/>
+                        PERSONAL
+                    </div>
+                    {
+                        this.state.isShowAccount
+                        ?   <div>
+                                <ui.Popover placement="left-start" width="200" trigger="hover" content={(
+                                    <div>
+                                        <span className={tips} style={{'padding':'0 0 20px', 'display': 'inline-block'}}>hello, {this.state.accountMsg.name}</span>
+                                        <img className={mainCss.mr20} style={{'float': 'left'}} src={this.state.accountMsg.img} width='60px' height='60px'/>
+                                        <ui.Button type='primary' size='mini' onClick={this.toEdit.bind(this)}>修改信息</ui.Button>
+                                        <ui.Button type='danger' size='mini' onClick={this.logout.bind(this)}>退出</ui.Button>
+                                    </div>
+                                )}>
+                                    <div className={topCss['login-logo']}></div>
+                                </ui.Popover>
+                                
+                            </div>   
+                        :   <div>
+                                <div className={topCss['outlog-logo']} onClick={this.toSign.bind(this, 0)}></div>
+                                <ui.Dialog
+                                    className={topCss['dialog-bg']}
+                                    size="tiny"
+                                    visible={ this.state.dialogOpen }
+                                    onCancel={ () => this.setState({ dialogOpen: false }) }
+                                    lockScroll={ false }>
+                                    <ui.Dialog.Body>
+                                        {
+                                            this.state.loginOpen 
+                                            ?   <Login logMsg={this.getSignMsg.bind(this, 0)} toChange={this.changeSign.bind(this)}/>
+                                            :   <Regi logMsg={this.getSignMsg.bind(this, 1)} toChange={this.changeSign.bind(this)}/>
+                                        }
+                                    </ui.Dialog.Body>
+                                </ui.Dialog>
+                            </div>
+                    }
                 </div>
-                {
-                    this.state.isShowAccount
-                    ?   <div>
-                            <ui.Popover placement="bottom" width="200" trigger="hover" content={(
-                                <div>
-                                    <span className={tips} style={{'padding':'0 0 20px', 'display': 'inline-block'}}>hello, {this.state.accountMsg.name}</span>
-                                    <img className={mainCss.mr20} style={{'float': 'left'}} src={this.state.accountMsg.img} width='60px' height='60px'/>
-                                    <ui.Button type='primary' size='mini' onClick={this.toEdit.bind(this)}>修改信息</ui.Button>
-                                    <ui.Button type='danger' size='mini' onClick={this.logout.bind(this)}>退出</ui.Button>
-                                </div>
-                            )}>
-                                <div className={topCss['login-logo']}></div>
-                            </ui.Popover>
-                            
-                        </div>   
-                    :   <div>
-                            <div className={topCss['outlog-logo']} onClick={this.toSign.bind(this, 0)}></div>
-                            {/* <ui.Button type='primary' onClick={this.toSign.bind(this, 0)}>登录</ui.Button>
-                            <ui.Button type='warning' onClick={this.toSign.bind(this, 1)}>注册</ui.Button> */}
-                            <ui.Dialog
-                                className={topCss['dialog-bg']}
-                                size="tiny"
-                                visible={ this.state.dialogOpen }
-                                onCancel={ () => this.setState({ dialogOpen: false }) }
-                                lockScroll={ false }>
-                                <ui.Dialog.Body>
-                                    {
-                                        this.state.loginOpen 
-                                        ?   <Login logMsg={this.getSignMsg.bind(this, 0)} toChange={this.changeSign.bind(this)}/>
-                                        :   <Regi logMsg={this.getSignMsg.bind(this, 1)} toChange={this.changeSign.bind(this)}/>
-                                    }
-                                </ui.Dialog.Body>
-                            </ui.Dialog>
-                        </div>
-                }
             </div>
         )
     }

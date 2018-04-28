@@ -9,7 +9,7 @@ class Login extends React.Component {
         super(props);
         this.state = {
             seconds: 10,
-            username: '',
+            email: '',
             password: '',
             msg: 'not login',
         };
@@ -23,31 +23,35 @@ class Login extends React.Component {
     
     setForm(type, e) {
         if(type == 1) {
-            this.setState(prev => ({
-                username: e
-            }))
+            this.setState({
+                email: e
+            })
         }
         else if(type == 2) {
-            this.setState(prev => ({
+            this.setState({
                 password: e
-            }))
+            })
         }
     }
 
     toLogin() {
-        let name = this.state.username
+        let email = this.state.email
         let passwd = this.state.password
-
-        if(name.length === 0) {
-            ui.Message.error('please enter your account!')
+        const emailStyle = /^[0-9a-zA-Z]+@[0-9a-z]+.[a-z]+$/
+        if(email.length === 0) {
+            ui.Message.error('please enter your account email!')
             return
         }
-        else if(passwd.length === 0) {
+        if(emailStyle.test(email) != true) {
+            ui.Message.error('please enter correct email~~~')
+            return
+        }
+        if(passwd.length === 0) {
             ui.Message.error('please enter your password!')
             return
         }
         React.axios.post('/server/login',{
-            username: name,
+            email: email,
             password: passwd
         })
             .then((res) =>{
@@ -92,7 +96,7 @@ class Login extends React.Component {
                         welcome, let's login!
                     </p>
                     <div className={loginCss.formCon}>
-                        <ui.Input placeholder='your account' onChange={this.setForm.bind(this, 1)} onKeyUp={this.handleEnter.bind(this)}/>
+                        <ui.Input placeholder='your account email' onChange={this.setForm.bind(this, 1)} onKeyUp={this.handleEnter.bind(this)}/>
                         <ui.Input type='password' placeholder='your password' onChange={this.setForm.bind(this, 2)} onKeyUp={this.handleEnter.bind(this)}/>
                         <ui.Button type='warning' onClick={this.toLogin.bind(this)}>LOGIN IN</ui.Button>
                         <ui.Button type='text' onClick={this.toChange.bind(this)}>未有帐号，去注册~~~</ui.Button>

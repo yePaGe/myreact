@@ -74,7 +74,8 @@ class Register extends React.Component {
             })
             .catch((err) =>{
                 console.log(err)
-                ui.Message.error(err)
+                ui.Message.error('服务器出错~！')
+                window.location.reload()
             })
     }
     toChange() {

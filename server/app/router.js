@@ -13,4 +13,6 @@ module.exports = app => {
   router.get('/users/list', controller.user.userList);
   router.get('/users/del', controller.user.delUser);
   router.get('/users/search', controller.user.searchUser);
+
+  router.post('/upload/img', controller.upload.img);
 };
