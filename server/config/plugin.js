@@ -10,3 +10,7 @@ exports.mongoose = {
     enable: true,
     package: 'egg-mongoose',
 };
+exports.oss = {
+    enable: true,
+    package: 'egg-oss',
+};

@@ -155,8 +155,8 @@ class User extends React.Component {
     uploadLogo() {
         let iptObj = document.getElementById('logo-ipt').files;
         let formD = new FormData();
-        formD.append('imgfile', iptObj[0]);
         formD.append('name', 'shazizaina。。。')
+        formD.append('imgfile', iptObj[0]);
         React.axios.post('/server/upload/img', formD)
             .then((res) => {
                 console.log('okupload', res)
