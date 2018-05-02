@@ -8,10 +8,10 @@ import { History } from 'react-router';
 class App extends React.Component{
 
     componentWillMount() {
-        let tokenKey = !window.sessionStorage.getItem('tokenKey') ? '' : JSON.parse(window.sessionStorage.getItem('tokenKey'))
+        let token = !window.sessionStorage.getItem('token') ? '' : JSON.parse(window.sessionStorage.getItem('token'))
         React.axios.get('/server/islogin',{
             params:{
-                key: tokenKey.token
+                key: token
             }
         }).then((res) => {
             const data = res.data   
@@ -31,7 +31,7 @@ class App extends React.Component{
                     }
                     return obj
                 })           
-            }
+            }  
             else {
                 csrfToken = window.sessionStorage.getItem('csrfToken')
             }
@@ -39,12 +39,14 @@ class App extends React.Component{
             React.axios.defaults.headers.post['x-csrf-token'] = csrfToken;
             
             console.log('res',data)
+            
             if(!data.code) { // 已登录就调转到当前路由的页面
                 console.log(data.msg)
             }
             else { // 未登录就跳转回登录界面
                 // 未登录不显示用户信息
-                window.sessionStorage.removeItem('tokenKey')
+                window.sessionStorage.removeItem('token')
+                window.sessionStorage.removeItem('userMsg')
                 // if(this.props.history.location.pathname == '/login') {
                 //     return
                 // }
@@ -56,7 +58,8 @@ class App extends React.Component{
             // 任何错误都删除登录状态，调整会登录界面
             // 未登录不显示用户信息
             console.log(err)
-            window.sessionStorage.removeItem('tokenKey')
+            window.sessionStorage.removeItem('token')
+            window.sessionStorage.removeItem('userMsg')
             // this.props.history.push('/login')
         })
     }

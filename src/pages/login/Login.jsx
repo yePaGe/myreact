@@ -50,7 +50,7 @@ class Login extends React.Component {
             ui.Message.error('please enter your password!')
             return
         }
-        React.axios.post('/server/login',{
+        React.axios.post('/server/login', {
             email: email,
             password: passwd
         })
@@ -61,12 +61,14 @@ class Login extends React.Component {
                     message: data.msg
                 })
                 if(data.code == 0) {
-                    let token = {
-                        name: data.user,
-                        email: data.email,
-                        token: data.token
+                    let token =  data.token;
+                    let userMsg = {
+                        logo: data.logo,
+                        name: data.username,
+                        email: data.email
                     }
-                    window.sessionStorage.setItem('tokenKey', JSON.stringify(token))
+                    window.sessionStorage.setItem('token', token)
+                    window.sessionStorage.setItem('userMsg', JSON.stringify(userMsg))
                     this.props.logMsg(token)
                 }
             })

@@ -19,35 +19,48 @@ class Top extends React.Component {
                 name: ''
             },
             topLogo: require('../../assets/img/y-logo.png'),
-            carouselStyle: ''
+            carouselStyle: '',
+            showBtn: false
         }
     }
     componentWillMount() {
         // 未登录不显示用户信息
-        if(!window.sessionStorage.tokenKey) {
+        if(!window.sessionStorage.token) {
             this.setState({
                 isShowAccount: false,
             })
         }
         else {
-            this.setState({
-                isShowAccount: true,
-                accountMsg: {
-                    img: require('../../assets/img/icon.png'),
-                    name: JSON.parse(window.sessionStorage.tokenKey).name
-                }
-            })
+            let userMsg = JSON.parse(window.sessionStorage.userMsg)
+            if(userMsg.logo.length == 0) {
+                this.setState({
+                    isShowAccount: true,
+                    accountMsg: {
+                        img: require('../../assets/img/inlog.png'),
+                        name: userMsg.name
+                    }
+                })
+            }
+            else {
+                this.setState({
+                    isShowAccount: true,
+                    accountMsg: {
+                        img: userMsg.logo,
+                        name: userMsg.name
+                    }
+                })
+            }
         }
     }
     logout() {
-        const username = JSON.parse(window.sessionStorage.tokenKey).name
+        const username = JSON.parse(window.sessionStorage.userMsg).name
         React.axios('/server/logout', {
             params: {
                 user: username
             }
         }).then((res) => {
-            window.sessionStorage.removeItem('tokenKey')
-            window.sessionStorage.removeItem('username')
+            window.sessionStorage.removeItem('token')
+            window.sessionStorage.removeItem('userMsg')
             this.setState({
                 isShowAccount: false
             })
@@ -61,13 +74,13 @@ class Top extends React.Component {
         })
     }
     getSignMsg(type, event) {
-        if(!type && !event.code) {
+        if(!type) {
             this.setState({
                 dialogOpen: false,
                 isShowAccount: true,
                 accountMsg: {
-                    img: require('../../assets/img/icon.png'),
-                    name: JSON.parse(window.sessionStorage.tokenKey).name
+                    img: JSON.parse(window.sessionStorage.userMsg).logo,
+                    name: JSON.parse(window.sessionStorage.userMsg).name
                 }
             })
         }
@@ -93,11 +106,16 @@ class Top extends React.Component {
     toEdit() {
         this.props.toEdit()
     }
-    changeCarousel(type) {
+    changeCarousel(type, router) {
         if(type == 1) {
             this.setState({
                 carouselStyle: `${topCss.carousel} ${topCss['car-hide']}`
             })
+            if(router == '/user') {
+                this.setState({
+                    showBtn: true
+                })
+            }
         }
         else if(type == 2) {
             this.setState({
@@ -105,10 +123,22 @@ class Top extends React.Component {
             })
         }
     }
+    backHome() {
+        this.props.back()
+    }
     render() {
         const tips = `${mainCss.mr20} ${mainCss.gray}`
         return(
             <div className={this.state.carouselStyle}>
+                {
+                    this.state.showBtn
+                    ?   <div className={topCss['back-btn']}>
+                            <ui.Tooltip className="item" effect="dark" content="返回首页" placement="right">
+                                <i className='el-icon-d-arrow-left' onClick={this.backHome.bind(this)}></i>
+                            </ui.Tooltip>
+                        </div>
+                    :   <div></div>
+                }
                 <div className={topCss.topBanner}>
                     <div className={topCss.titleName}>
                         <img src={this.state.topLogo} width='50px' height='50px'/>
@@ -120,7 +150,7 @@ class Top extends React.Component {
                                 <ui.Popover placement="left-start" width="200" trigger="hover" content={(
                                     <div>
                                         <span className={tips} style={{'padding':'0 0 20px', 'display': 'inline-block'}}>hello, {this.state.accountMsg.name}</span>
-                                        <img className={mainCss.mr20} style={{'float': 'left'}} src={this.state.accountMsg.img} width='60px' height='60px'/>
+                                        <img className={topCss.logo} src={this.state.accountMsg.img}/>
                                         <ui.Button type='primary' size='mini' onClick={this.toEdit.bind(this)}>修改信息</ui.Button>
                                         <ui.Button type='danger' size='mini' onClick={this.logout.bind(this)}>退出</ui.Button>
                                     </div>

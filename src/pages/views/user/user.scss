@@ -1,14 +1,7 @@
 .container{
     margin-top: 80px;
 }
-.back-btn{
-    position: absolute;
-    top:30px;
-    left: 20px;
-    cursor: pointer;
-    z-index: 9999;
-    height: 40px;  
-}
+
 .top-banner {
     display: flex;
     flex-direction: row;
@@ -50,7 +43,7 @@
         }
         .logo-line{
             width: 250px;
-            .logo{
+            .logo-content{
                 width: 70px;
                 height: 70px;
                 border-radius: 35px;
@@ -63,6 +56,11 @@
                     margin-top: 20px;
                     margin-left: 23px;
                     color: #aaa;
+                }
+                .logo{
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 40px;
                 }
             }
             .btn{

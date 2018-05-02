@@ -62,30 +62,30 @@ class User extends React.Component {
             tabThree: `${userCss['tab-contain']}`,
             currentTab: 1,
             account: {
-                logo:'',
+                _id: '',
                 email: '',
-                username: '',
                 createDate: '',
                 lastLogin: ''
             },
             logo: '',
-            username: ''
+            username: '',
+            hasEdit: false
         }
     }
     componentWillMount() {
-        if(!window.sessionStorage.tokenKey) {
+        if(!window.sessionStorage.token) {
             this.props.history.push('/home')
             return
         }
     }
     componentDidMount() {
-        this.refs.carStyle.changeCarousel(1)
+        this.refs.carStyle.changeCarousel(1, '/user')
         this.getUserList()     
     }
     getUserList() {
         React.axios('/server/users/list').then((res) => {
             if(!res.data.code) {
-                const curEmail = JSON.parse(window.sessionStorage.tokenKey).email
+                const curEmail = JSON.parse(window.sessionStorage.userMsg).email
                 console.log(curEmail)
                 let list = res.data.list.map((i) => {
                     if(i.email == curEmail) {
@@ -116,9 +116,7 @@ class User extends React.Component {
             console.log(err)
         })
     }
-    backHome() {
-        this.props.history.push('/home')
-    }
+    
     changeTab(type) {
         this.setState({
             tabOne: type == 1 ? `${userCss['tab-contain']} ${userCss['tab-active']}` : `${userCss['tab-contain']}`,
@@ -129,7 +127,7 @@ class User extends React.Component {
         if(type == 2) {
             React.axios('/server/users/search', {
                 params: {
-                    email: JSON.parse(window.sessionStorage.tokenKey).email
+                    email: JSON.parse(window.sessionStorage.userMsg).email
                 }
             }).then((res) => {
                 this.setState({
@@ -143,14 +141,9 @@ class User extends React.Component {
         }
     }
     openLogo() {
+        console.log('adsaf')
         let iptObj = document.getElementById('logo-ipt');
-        // iptObj.setAttribute('type', 'file')
-        // iptObj.setAttribute('id', 'logo-ipt')
-        // // iptObj.setAttribute('style', 'visibility:hidden')
-        // iptObj.setAttribute('onChange', 'console.log(window, document)')
-        // document.getElementById('logo').appendChild(iptObj)
         iptObj.click();
-        // iptObj.value;
     }
     uploadLogo() {
         let iptObj = document.getElementById('logo-ipt').files;
@@ -160,6 +153,10 @@ class User extends React.Component {
         React.axios.post('/server/upload/img', formD)
             .then((res) => {
                 console.log('okupload', res)
+                this.setState({
+                    logo: res.data.url,
+                    hasEdit: true
+                })
             })
             .catch((err) => {
                 console.log(err)
@@ -167,22 +164,48 @@ class User extends React.Component {
     }
     editAccount(e) {
         this.setState({
-            username: e
+            username: e,
+            hasEdit: true
         })
     }
     saveEdit() {
-        console.log(this.state.logo, this.state.username)
+        console.log(this.state.logo, this.state.username, this.state.hasEdit)
+        
+        if(this.state.hasEdit == false) {
+            ui.Message.warning('并没作任何修改，无需保存~~')
+        }
+        React.axios.post('/server/users/edit', {
+            id: this.state.account._id,
+            logo: this.state.logo,
+            username: this.state.username
+        })
+            .then((res) => {
+                if(!res.data.code) {
+                    const data = JSON.parse(res.data.msg)
+                    ui.Message.success('修改成功')
+                    const userMsg = {
+                        logo: data.logo,
+                        name: data.username,
+                        email: data.email
+                    }
+                    window.sessionStorage.userMsg = JSON.stringify(userMsg)
+                }
+                else {
+                    ui.Message({
+                        type: 'error',
+                        message: res.data.msg
+                    })
+                }
+            })
+    }
+    backHome() {
+        this.props.history.push('/home')
     }
     render() {
         return(
             <div className={mainCss.main}>
-                <Top ref='carStyle'/>
+                <Top back={this.backHome.bind(this)} ref='carStyle'/>
                 <div className={userCss.container}>
-                    <div className={userCss['back-btn']}>
-                        <ui.Tooltip className="item" effect="dark" content="返回首页" placement="right">
-                            <i className='el-icon-d-arrow-left' onClick={this.backHome.bind(this)}></i>
-                        </ui.Tooltip>
-                    </div>
                     <div className={userCss['top-banner']}>
                         <div className={this.state.tabOne} onClick={this.changeTab.bind(this, 1)}>用户列表</div>
                         <div className={this.state.tabTwo} onClick={this.changeTab.bind(this, 2)}>帐号信息</div>
@@ -203,17 +226,17 @@ class User extends React.Component {
                                     <div className={userCss.line}>
                                         <span className={userCss.title}>头像：</span>
                                         <div className={userCss['logo-line']}>
+                                            <input type='file' style={{'visibility': 'hidden'}} id='logo-ipt' onChange={this.uploadLogo.bind(this)}/>
                                             {
-                                                this.state.account.logo.length == 0
-                                                ?   <div className={userCss.logo}>
+                                                this.state.logo.length == 0
+                                                ?   <div className={userCss['logo-content']}>
                                                         <i className='el-icon-upload2' style={{'cursor': 'pointer'}} onClick={this.openLogo.bind(this)}></i>
-                                                        <input type='file' style={{'visibility': 'hidden'}} id='logo-ipt' onChange={this.uploadLogo.bind(this)}/>
                                                     </div>
                                                 :   <div>
-                                                        <div className={userCss.logo}>
-                                                            <img src={this.state.account.logo}/>
+                                                        <div className={userCss['logo-content']}>
+                                                            <img src={this.state.logo} className={userCss.logo}/>
                                                         </div>
-                                                        <ui.Button size='mini' type='success' className={userCss.btn}>修改头像</ui.Button>
+                                                        <ui.Button size='mini' type='success' className={userCss.btn} onClick={this.openLogo.bind(this)}>修改头像</ui.Button>
                                                     </div>
                                             }
                                             
@@ -225,7 +248,7 @@ class User extends React.Component {
                                     </div>
                                     <div className={userCss.line}>
                                         <span className={userCss.title}>用户名：</span>
-                                        <ui.Input style={{'width': '230px'}} size='small' placeholder={'当前用户名为' + this.state.account.username} onChange={this.editAccount.bind(this)}></ui.Input>
+                                        <ui.Input style={{'width': '230px'}} size='small' placeholder={'当前用户名为' + this.state.username} onChange={this.editAccount.bind(this)}></ui.Input>
                                     </div>
                                     <div className={userCss.line}>
                                         <span className={userCss.title}>创建日期：</span>

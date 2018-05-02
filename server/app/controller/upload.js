@@ -5,9 +5,8 @@ const Controller = require('egg').Controller;
 
 class UploadController extends Controller {
     async img() {
-        const that = this
         const stream = await this.ctx.getFileStream();
-        const name = 'egg-multipart-test/' + path.basename(stream.filename);
+        const name = 'img/' + path.basename(stream.filename);
         let result;
         try{
             // 文件处理，上传云存储等

@@ -90,8 +90,9 @@ class UserController extends Controller {
         this.ctx.cookies.set('tokenKey', tokenKey.token);
         this.ctx.body = {
           code: 0,
+          logo: user.logo,
           token: tokenKey.token,
-          user: user.username,
+          username: user.username,
           email: user.email,
           msg: 'login successfully!',
         };
@@ -172,6 +173,28 @@ class UserController extends Controller {
       this.ctx.body = {
         code: 0,
         list: list
+      }
+    }
+  }
+
+  async editUser() {
+    const data = this.ctx.request.body
+    const updateRes = await this.service.user.update(data.id, {
+      logo: data.logo,
+      username: data.username
+    })
+    if(updateRes.n == 1 && updateRes.ok == 1) {
+      let email = 'undefined'
+      const user = await this.service.user.findOne(email, data.id)
+      this.ctx.body = {
+        code: 0,
+        msg: JSON.stringify(user)
+      }
+    }
+    else {
+      this.ctx.body = {
+        code: 1,
+        msg: '修改失败~~！'
       }
     }
   }

@@ -1,4 +1,5 @@
 'use strict';
+// const ossKey = require('../ossKey');
 
 module.exports = appInfo => {
   const config = exports = {};
@@ -23,14 +24,15 @@ module.exports = appInfo => {
 
   config.oss = {
     client: {
-      accessKeyId: 'your access key',
-      accessKeySecret: 'your access secret',
-      bucket: 'your bucket name',
-      endpoint: 'oss-cn-hongkong.aliyun.com',
+      region: 'oss-cn-beijing',
+      accessKeyId: 'LTAIxuwCzuWowgiv',
+      accessKeySecret: 'N2Nk6QuGjLA48s2mEtVqUy8KnccTaV',
+      bucket: 'myreactfile',
+      endpoint: 'oss-cn-beijing.aliyuncs.com',
       timeout: '60s',
     },
     useAgent: true
   };
-  
+
   return config;
 };

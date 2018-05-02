@@ -1,5 +1,5 @@
 .carousel{
-    position: absolute;
+    position: fixed;
     top: 0;
     z-index: 9999!important;
     width: 100%;
@@ -100,6 +100,7 @@
     display: flex;
     justify-content: space-between;
     padding: 10px 20px 20px 10px;
+    background: url('../../assets/img/bannerbg.jpg')
 }
 .titleName {
     margin-left: 250px;
@@ -127,4 +128,19 @@
 }
 .outlog-logo:hover{
     background-image: url('../../assets/img/iconh.png')
+}
+.logo{
+    width: 60px;
+    height: 60px;
+    float: left;
+    border-radius: 40px;
+    margin-right: 20px;
+}
+.back-btn{
+    position: absolute;
+    top:30px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 9999;
+    height: 40px;  
 }
