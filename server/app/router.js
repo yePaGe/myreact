@@ -15,5 +15,8 @@ module.exports = app => {
   router.get('/users/search', controller.user.searchUser);
   router.post('/users/edit', controller.user.editUser)
 
+  router.post('/pwd/check', controller.pwd.check);
+  router.post('/pwd/edit', controller.pwd.edit);
+  
   router.post('/upload/img', controller.upload.img);
 };

@@ -5,6 +5,15 @@ const Controller = require('egg').Controller;
 
 class UploadController extends Controller {
     async img() {
+        const token = this.ctx.cookies.get('tokenKey')
+        const checkToken = await this.service.token.checkToken(token)
+        if(!checkToken) {
+            this.ctx.status = 500;
+            this.ctx.body = {
+                msg: 'Internet Server Error!'
+            }
+            return
+        }
         const stream = await this.ctx.getFileStream();
         const name = 'img/' + path.basename(stream.filename);
         let result;

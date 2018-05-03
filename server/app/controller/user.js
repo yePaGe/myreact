@@ -1,10 +1,8 @@
 'use strict';
 const Controller = require('egg').Controller;
-const crypto = require('crypto');
-const { formateDate } = require('../uitls/formateDate');
 
 class UserController extends Controller {
-  async islogin() {
+  async islogin() {    
     if (!this.ctx.request.header.cookie) { //first open no cookies
       this.ctx.body = {
         code: 1,
@@ -48,9 +46,7 @@ class UserController extends Controller {
     const data = this.ctx.request.body;
     const user = await this.service.user.findOne(data.user);
     if (!user) {
-      let md5 =  crypto.createHash('md5');
-      md5.update(data.password);
-      data.password = md5.digest('hex');
+      data.password = await this.app.cryptoPwd(data.password)
       const newuser = await this.service.user.create(data);
       if (!newuser) {
         this.ctx.body = {
@@ -73,9 +69,7 @@ class UserController extends Controller {
 
   async login() {
     const data = this.ctx.request.body;
-    let md5 =  crypto.createHash('md5');
-    md5.update(data.password);
-    let pwd = md5.digest('hex');
+    const pwd = await this.app.cryptoPwd(data.password)
     const user = await this.service.user.findOne(data.email);
     if (!user) {
       this.ctx.body = {
@@ -84,7 +78,7 @@ class UserController extends Controller {
       };
     } else {
       if (user.password === pwd) {
-        const loginDate = formateDate(0);
+        const loginDate = this.app.formateDate(0);
         const tokenKey = await this.service.token.createToken(user);
         await this.service.user.update(user.id, { islogin: true, lastLogin: loginDate, tokenId: tokenKey._id });
         this.ctx.cookies.set('tokenKey', tokenKey.token);
@@ -106,6 +100,15 @@ class UserController extends Controller {
   }
 
   async logout() {
+    const token = this.ctx.cookies.get('tokenKey')
+    const checkToken = await this.service.token.checkToken(token)
+    if(!checkToken) {
+      this.ctx.status = 500;
+      this.ctx.body = {
+        msg: 'Internet Server Error!'
+      }
+      return
+    }
     const email = this.ctx.request.query.email;
     const user = await this.service.user.findOne(email)
     if(!user) {
@@ -127,6 +130,15 @@ class UserController extends Controller {
   }
 
   async userList() {
+    const token = this.ctx.cookies.get('tokenKey')
+    const checkToken = await this.service.token.checkToken(token)
+    if(!checkToken) {
+      this.ctx.status = 500;
+      this.ctx.body = {
+        msg: 'Internet Server Error!'
+      }
+      return
+    }
     const userList = await this.service.user.getList()
     this.ctx.body = {
       code: 0,
@@ -135,6 +147,15 @@ class UserController extends Controller {
   }
 
   async delUser() {
+    const token = this.ctx.cookies.get('tokenKey')
+    const checkToken = await this.service.token.checkToken(token)
+    if(!checkToken) {
+      this.ctx.status = 500;
+      this.ctx.body = {
+        msg: 'Internet Server Error!'
+      }
+      return
+    }
     const id = this.ctx.request.query.id
     const del = await this.service.user.delete(id, tokenId)
     if(!del) {
@@ -158,6 +179,15 @@ class UserController extends Controller {
   }
 
   async searchUser() {
+    const token = this.ctx.cookies.get('tokenKey')
+    const checkToken = await this.service.token.checkToken(token)
+    if(!checkToken) {
+      this.ctx.status = 500;
+      this.ctx.body = {
+        msg: 'Internet Server Error!'
+      }
+      return
+    }
     const id = this.ctx.request.query.id;
     const email = this.ctx.request.query.email
     const res = await this.service.user.findOne(email, id)
@@ -178,6 +208,15 @@ class UserController extends Controller {
   }
 
   async editUser() {
+    const token = this.ctx.cookies.get('tokenKey')
+    const checkToken = await this.service.token.checkToken(token)
+    if(!checkToken) {
+      this.ctx.status = 500;
+      this.ctx.body = {
+        msg: 'Internet Server Error!'
+      }
+      return
+    }
     const data = this.ctx.request.body
     const updateRes = await this.service.user.update(data.id, {
       logo: data.logo,

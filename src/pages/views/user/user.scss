@@ -22,7 +22,7 @@
 .table-container{
     margin: 20px;
     .msg{
-        width: 400px;
+        width: 500px;
         margin: 40px 20px;
         .line{
             display: flex;
@@ -70,4 +70,35 @@
             }
         }      
     }
+}
+
+.err{
+    color: rgb(243, 83, 83);
+}
+.suc{
+    color: rgb(63, 177, 63);
+}
+.level3{
+    margin-top: 15px;
+    width: 20px;
+    height: 10px;
+    border-left: 20px solid rgb(63, 177, 63);
+    background-color: rgb(63, 177, 63);
+    border-right: 20px solid rgb(63, 177, 63);
+}
+.level2{
+    margin-top: 15px;
+    width: 20px;
+    height: 10px;
+    border-left: 20px solid rgb(63, 177, 63);
+    background-color: rgb(63, 177, 63);
+    border-right: 20px solid #aaa;
+}
+.level1{
+    margin-top: 15px;
+    width: 20px;
+    height: 10px;
+    border-left: 20px solid rgb(63, 177, 63);
+    background-color: #aaa;
+    border-right: 20px solid #aaa;
 }

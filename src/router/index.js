@@ -8,7 +8,7 @@ import { History } from 'react-router';
 class App extends React.Component{
 
     componentWillMount() {
-        let token = !window.sessionStorage.getItem('token') ? '' : JSON.parse(window.sessionStorage.getItem('token'))
+        let token = !window.sessionStorage.getItem('token') ? '' : window.sessionStorage.getItem('token')
         React.axios.get('/server/islogin',{
             params:{
                 key: token
@@ -41,18 +41,18 @@ class App extends React.Component{
             console.log('res',data)
             
             if(!data.code) { // 已登录就调转到当前路由的页面
-                console.log(data.msg)
+                ui.Message.success('用户已登录，正在跳转~~~')
             }
             else { // 未登录就跳转回登录界面
                 // 未登录不显示用户信息
                 window.sessionStorage.removeItem('token')
                 window.sessionStorage.removeItem('userMsg')
-                // if(this.props.history.location.pathname == '/login') {
-                //     return
-                // }
-                // else {
-                //     this.props.history.push('/login')
-                // }
+                if(this.props.history.location.pathname == '/login') {
+                    return
+                }
+                else {
+                    this.props.history.push('/login')
+                }
             }
         }).catch((err) => {
             // 任何错误都删除登录状态，调整会登录界面

@@ -10,6 +10,8 @@ class User extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: true,
+            showTable: false,
             searchKey: '',
             columns: [
                 {
@@ -44,13 +46,12 @@ class User extends React.Component {
                     align: 'center',
                     render: (e) => {
                         if(e.isCur == true) {
-                            return <span>
-                                <ui.Button disabled>当前用户</ui.Button>
-                            </span>
+                            return <span><ui.Button type="text" size="small" onClick={this.delUser.bind(this)}>移除</ui.Button></span>
                         }
                         else {
                             return <span>
-                                <ui.Button icon='delete' type='danger'></ui.Button>
+                                <ui.Button size='mini' icon='delete' type='danger' onClick={this.delUser.bind(this, e.id)}></ui.Button>
+                                <ui.Button type="text" size="small" onClick={this.delUser.bind(this)}>移除</ui.Button>
                             </span>
                         }
                     }
@@ -69,7 +70,13 @@ class User extends React.Component {
             },
             logo: '',
             username: '',
-            hasEdit: false
+            hasEdit: false,
+            oldpwd: '',
+            oldCheck: 0,
+            newpwd: '',
+            newCheck: 0,
+            secpwd: '',
+            secCheck: 0
         }
     }
     componentWillMount() {
@@ -80,6 +87,11 @@ class User extends React.Component {
     }
     componentDidMount() {
         this.refs.carStyle.changeCarousel(1, '/user')
+        setTimeout(() => {
+            this.setState({
+                showTable: true
+            })
+        }, 500)
         this.getUserList()     
     }
     getUserList() {
@@ -100,11 +112,19 @@ class User extends React.Component {
                     userList: list
                 })
             }
+            this.setState({
+                loading: false
+            })
         }).catch((err) => {
             console.log(err)
+            ui.Message.error('服务器出错~~~')
         })
     }
-    toDel(id, tokenId) {
+    delUser(id) {
+        this.setState({
+            loading: true
+        })
+        console.log('deluser')
         React.axios('/server/users/del', {
             params: {
                 id: id
@@ -114,9 +134,9 @@ class User extends React.Component {
             this.getUserList()
         }).catch((err) => {
             console.log(err)
+            ui.Message.error('服务器出错~~~')
         })
     }
-    
     changeTab(type) {
         this.setState({
             tabOne: type == 1 ? `${userCss['tab-contain']} ${userCss['tab-active']}` : `${userCss['tab-contain']}`,
@@ -137,6 +157,7 @@ class User extends React.Component {
                 })
             }).catch((err) => {
                 console.log(err)
+                ui.Message.error('服务器出错~~~')
             })
         }
     }
@@ -160,12 +181,135 @@ class User extends React.Component {
             })
             .catch((err) => {
                 console.log(err)
+                ui.Message.error('服务器出错~~~')
             })
     }
-    editAccount(e) {
-        this.setState({
-            username: e,
-            hasEdit: true
+    editIpt(type, e) {
+        if(!type) {
+            this.setState({
+                username: e,
+                hasEdit: true
+            })
+        }
+        else if (type == 1) {
+            this.setState({
+                oldpwd: e
+            })
+        }
+        else if (type == 2) {
+            this.setState({
+                newpwd: e
+            })
+            let level1 = /[0-9a-z]/g
+            let level2 = /[A-Z]/g
+            let level3 = /[,._]/g
+            const l1 = level1.test(e)
+            const l2 = level2.test(e)
+            const l3 = level3.test(e)
+            if(e.length >= 6 && e.length < 17) {
+                if(l1 || l2 || l3) {
+                    if(l1 && l2 && l3) {
+                        this.setState({
+                            newCheck: 3
+                        })
+                    }
+                    else {
+                        if((l1 && l2) || (l1 && l3) || (l2 && l3)) {
+                            this.setState({
+                                newCheck: 2
+                            })
+                        }
+                        else {
+                            this.setState({
+                                newCheck: 1
+                            })
+                        }
+                    }
+                }
+                else {
+                    this.setState({
+                        newCheck: 4
+                    })
+                    ui.Message.error('新密码请输入正确格式~~~')
+                }
+            }
+        }
+        else if (type == 3) {
+            this.setState({
+                secpwd: e
+            })
+        }
+    }
+    checkPwd(type) {
+        if(type == 1) {
+            React.axios.post('/server/pwd/check', {
+                email: JSON.parse(window.sessionStorage.userMsg).email,
+                pwd: this.state.oldpwd
+            }).then((res) => {
+                if(!res.data.code) {
+                    this.setState({
+                        oldCheck: 1
+                    })
+                }
+                else {
+                    ui.Message.error('原密码不正确~~~')
+                    this.setState({
+                        oldCheck: 2
+                    })
+                }
+            }).catch((err) => {
+                console.log(err)
+                ui.Message.error('服务器出错~~~')
+            })
+        }
+        else if(type == 2) {
+            if(this.state.newpwd.length < 6 || this.state.newpwd.length >= 17) {
+                this.setState({
+                    newCheck: 4
+                })
+                ui.Message.error('新密码长度应为6-16个字符！')
+            }
+        }
+        else if(type == 3) {
+            if(this.state.newpwd != this.state.secpwd) {
+                ui.Message.error('两次输入的密码不一致~~！')
+                this.setState({
+                    secCheck: 2
+                })
+            }
+            else if(this.state.newpwd == this.state.secpwd) {
+                this.setState({
+                    secCheck: 1
+                })
+            }
+        }
+    }
+    savePwd() {
+        if(!this.state.oldpwd) {
+            ui.Message.warning('请输入原密码~~~')
+            return
+        }
+        if(!this.state.newpwd) {
+            ui.Message.warning('请输入新密码~~~')
+            return
+        }
+        if(!this.state.secpwd) {
+            ui.Message.warning('请再次输入新密码~~~')
+            return
+        }
+        React.axios.post('/server/pwd/edit', {
+            email: JSON.parse(window.sessionStorage.userMsg).email,
+            pwd: this.state.newpwd
+        }).then((res) => {
+            if(!res.data.code) {
+                ui.Message.success('密码修改成功~~~')
+            }
+            else {
+                ui.Message.error('密码修改失败~~~')
+            }
+        }).catch((err) => {
+            console.log(err)
+            ui.Message.error('服务器出错~~~')
         })
     }
     saveEdit() {
@@ -178,8 +322,7 @@ class User extends React.Component {
             id: this.state.account._id,
             logo: this.state.logo,
             username: this.state.username
-        })
-            .then((res) => {
+        }).then((res) => {
                 if(!res.data.code) {
                     const data = JSON.parse(res.data.msg)
                     ui.Message.success('修改成功')
@@ -189,6 +332,7 @@ class User extends React.Component {
                         email: data.email
                     }
                     window.sessionStorage.userMsg = JSON.stringify(userMsg)
+                    window.location.reload()
                 }
                 else {
                     ui.Message({
@@ -196,12 +340,19 @@ class User extends React.Component {
                         message: res.data.msg
                     })
                 }
-            })
+        }).catch((err) => {
+            console.log(err)
+            ui.Message.error('服务器出错~~~')
+        })
     }
     backHome() {
         this.props.history.push('/home')
     }
+
     render() {
+        let oldCheck = this.state.oldCheck == 0 ? '' : this.state.oldCheck == 1 ? `el-icon-circle-check ${userCss.suc}` : `el-icon-circle-close ${userCss.err}` 
+        let newCheck = this.state.newCheck == 0 ? '' : this.state.newCheck == 1 ? userCss.level1 : this.state.newCheck == 2 ? userCss.level2 : this.state.newCheck == 3 ? userCss.level3 : `el-icon-circle-close ${userCss.err}`
+        let secCheck = this.state.secCheck == 0 ? '' : this.state.secCheck == 1 ? `el-icon-circle-check ${userCss.suc}` : `el-icon-circle-close ${userCss.err}` 
         return(
             <div className={mainCss.main}>
                 <Top back={this.backHome.bind(this)} ref='carStyle'/>
@@ -214,13 +365,16 @@ class User extends React.Component {
                     <div className={userCss['table-container']}>
                     {
                         this.state.currentTab == 1
-                        ?   <ui.Table
-                                style={{width: '100%'}}
-                                columns={this.state.columns}
-                                maxHeight={200}
-                                border={true}
-                                data={this.state.userList}
-                            />
+                        ?   !this.state.showTable 
+                            ?   <div></div>
+                            :   <ui.Loading loading={this.state.loading}>
+                                    <ui.Table
+                                        style={{width: '100%', 'zIndex': '0'}}
+                                        columns={this.state.columns}
+                                        maxHeight={200}
+                                        border={true}
+                                        data={this.state.userList}/>
+                                </ui.Loading>
                         :   this.state.currentTab == 2
                             ?   <div className={userCss.msg}>
                                     <div className={userCss.line}>
@@ -248,7 +402,7 @@ class User extends React.Component {
                                     </div>
                                     <div className={userCss.line}>
                                         <span className={userCss.title}>用户名：</span>
-                                        <ui.Input style={{'width': '230px'}} size='small' placeholder={'当前用户名为' + this.state.username} onChange={this.editAccount.bind(this)}></ui.Input>
+                                        <ui.Input style={{'width': '230px'}} size='small' placeholder={'当前用户名为' + this.state.username} onChange={this.editIpt.bind(this, 0)}></ui.Input>
                                     </div>
                                     <div className={userCss.line}>
                                         <span className={userCss.title}>创建日期：</span>
@@ -262,9 +416,31 @@ class User extends React.Component {
                                         <ui.Button size="small" type='primary' style={{'marginLeft': '75px'}} onClick={this.saveEdit.bind(this)}>保存修改</ui.Button>
                                     </div>
                                 </div>
-                            :   <div className={userCss.line}>
-                                <p>adfsasdfsdf</p>
-                                <p>1111111</p>
+                            :   <div className={userCss.msg}>
+                                    <div className={userCss.line}>
+                                        <span className={userCss.title}>原密码：</span>
+                                        <ui.Input type='password' style={{'width': '250px', 'marginLeft': '15px'}} size="small" onChange={this.editIpt.bind(this, 1)} onBlur={this.checkPwd.bind(this, 1)}></ui.Input>
+                                        <div style={{'width': '100px', 'margin': '5px 0 0 15px'}}>
+                                            <i className={oldCheck}></i>                                      
+                                        </div>
+                                    </div>
+                                    <div className={userCss.line}>
+                                        <span className={userCss.title}>新密码：</span>
+                                        <ui.Input type='password' style={{'width': '250px', 'marginLeft': '15px'}} placeholder='只能是6-16位字母、数字和,._字符' size="small" onChange={this.editIpt.bind(this, 2)} onBlur={this.checkPwd.bind(this, 2)}></ui.Input>
+                                        <div style={{'width': '100px', 'margin': '5px 0 0 15px'}}>
+                                            <div className={newCheck}></div>
+                                        </div>
+                                    </div>
+                                    <div className={userCss.line}>
+                                        <span className={userCss.title}>确认新密码：</span>
+                                        <ui.Input type='password' style={{'width': '250px', 'marginLeft': '15px'}} placeholder='只能是6-16位字母、数字和,._字符' size="small" onChange={this.editIpt.bind(this, 3)} onBlur={this.checkPwd.bind(this, 3)}></ui.Input>
+                                        <div style={{'width': '100px', 'margin': '5px 0 0 15px'}}>
+                                            <i className={secCheck}></i>
+                                        </div>
+                                    </div>
+                                    <div className={userCss.line}>
+                                        <ui.Button size="small" type='primary' style={{'marginLeft': '75px'}} onClick={this.savePwd.bind(this)}>保存修改</ui.Button>
+                                    </div>
                                 </div>
                     }
                         

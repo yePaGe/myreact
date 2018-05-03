@@ -1,7 +1,6 @@
 'use strict';
 
 const Service = require('egg').Service;
-const { formateDate } = require('../uitls/formateDate');
 
 class UserService extends Service {
     async getList() {
@@ -27,7 +26,7 @@ class UserService extends Service {
         return update;
     }  
     async create(user) {
-        const nowDate = formateDate(0)
+        const nowDate = this.app.formateDate(0)
         const newuser = await this.ctx.model.User.create({
             username: user.username,
             email: user.email,

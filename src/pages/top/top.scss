@@ -1,17 +1,17 @@
 .carousel{
     position: fixed;
     top: 0;
-    z-index: 9999!important;
     width: 100%;
+    z-index: 1;
     height: 800px;
     background: url('../../assets/img/bannerbg.jpg')
 }
 .car-hide{
     height: 80px;
-    animation: carHide 2s;
-    -moz-animation:carHide 2s; /* Firefox */
-    -webkit-animation:carHide 2s; /* Safari and Chrome */
-    -o-animation:carHide 2s; /* Opera */
+    animation: carHide 1s;
+    -moz-animation:carHide 1s; /* Firefox */
+    -webkit-animation:carHide 1s; /* Safari and Chrome */
+    -o-animation:carHide 1s; /* Opera */
 }
 @keyframes carHide{
     from {

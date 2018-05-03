@@ -74,6 +74,7 @@ class Login extends React.Component {
             })
             .catch((err) =>{
                 console.log(err)
+                ui.Message.error('服务器出错~~~')
             })
     }
 
