@@ -2,7 +2,6 @@
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1;
     height: 800px;
     background: url('../../assets/img/bannerbg.jpg')
 }
@@ -92,7 +91,7 @@
     }
 }
 
-.topBanner {
+.top-banner {
     position: fixed;
     top: 0;
     left: 0;
@@ -143,4 +142,14 @@
     cursor: pointer;
     z-index: 9999;
     height: 40px;  
+}
+.nav-content{
+    margin-top: 100px;
+    z-index: 100;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+.nav{
+    width: 22%;
 }

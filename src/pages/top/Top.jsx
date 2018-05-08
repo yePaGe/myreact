@@ -20,7 +20,8 @@ class Top extends React.Component {
             },
             topLogo: require('../../assets/img/y-logo.png'),
             carouselStyle: '',
-            showBtn: false
+            showBtn: false,
+            navBtn:''
         }
     }
     componentWillMount() {
@@ -122,7 +123,8 @@ class Top extends React.Component {
         }
         else if(type == 2) {
             this.setState({
-                carouselStyle: `${topCss.carousel} ${topCss['car-show']}`
+                carouselStyle: `${topCss.carousel} ${topCss['car-show']}`,
+                navBtn: `${topCss['nav-content']}`
             })
         }
     }
@@ -133,6 +135,7 @@ class Top extends React.Component {
         const tips = `${mainCss.mr20} ${mainCss.gray}`
         return(
             <div className={this.state.carouselStyle}>
+                {/* 是否显示返回主页按钮 */}
                 {
                     this.state.showBtn
                     ?   <div className={topCss['back-btn']}>
@@ -142,11 +145,12 @@ class Top extends React.Component {
                         </div>
                     :   <div></div>
                 }
-                <div className={topCss.topBanner}>
+                <div className={topCss['top-banner']}>
                     <div className={topCss.titleName}>
                         <img src={this.state.topLogo} width='50px' height='50px'/>
                         PERSONAL
                     </div>
+                    {/* 登录信息 */}
                     {
                         this.state.isShowAccount
                         ?   <div>
@@ -180,6 +184,24 @@ class Top extends React.Component {
                                 </ui.Dialog>
                             </div>
                     }
+                </div>
+                <div className={this.state.navBtn}>
+                    <div className={topCss.nav}>
+                        121212
+                        {/* <img width='80%' height='50%' src=''/> */}
+                    </div>
+                    <div className={topCss.nav}>
+                        22222
+                        {/* <img width='80%' height='50%' src=''/> */}
+                    </div>
+                    <div className={topCss.nav}>
+                        33333
+                        {/* <img width='80%' height='50%' src=''/> */}
+                    </div>
+                    <div className={topCss.nav}>
+                        44444
+                        {/* <img width='80%' height='50%' src=''/> */}
+                    </div>
                 </div>
             </div>
         )

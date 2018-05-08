@@ -19,4 +19,10 @@ module.exports = app => {
   router.post('/pwd/edit', controller.pwd.edit);
   
   router.post('/upload/img', controller.upload.img);
+
+  router.get('/imgs/create', controller.imgsList.createStock);
+  router.post('/imgs/add', controller.imgsList.addList);
+  router.get('/imgs/delete', controller.imgsList.delItem);
+  router.get('/imgs/itemList', controller.imgsList.itemList);
+  router.get('/imgs/nameList', controller.imgsList.nameList);
 };

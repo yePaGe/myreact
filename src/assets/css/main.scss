@@ -15,9 +15,13 @@ $font-color: #000080;
   font-size: 20px;
   font-weight: bolder;
 }
-.flexPlay{
+.flex-between{
   display: flex;
   justify-content: space-between;
+}
+.flex-row{
+  display: flex;
+  flex-direction: row;
 }
 .mt{
   margin-top: 20px; 
