@@ -72,11 +72,6 @@ class Register extends React.Component {
                     this.props.logMsg(res.data.code)
                 }
             })
-            .catch((err) =>{
-                console.log(err)
-                ui.Message.error('服务器出错~！')
-                window.location.reload()
-            })
     }
     toChange() {
         this.props.toChange(1)

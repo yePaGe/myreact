@@ -4,15 +4,6 @@ const Controller = require('egg').Controller;
 
 class Pwd extends Controller {
     async check() {
-        const token = this.ctx.cookies.get('tokenKey')
-        const checkToken = await this.service.token.checkToken(token)
-        if(!checkToken) {
-            this.ctx.status = 500;
-            this.ctx.body = {
-                msg: 'Internet Server Error!'
-            }
-            return
-        }
         const data = this.ctx.request.body;
         const pwd = await this.app.cryptoPwd(data.pwd)
         const user = await this.service.user.findOne(data.email);
@@ -31,15 +22,6 @@ class Pwd extends Controller {
     }
 
     async edit() {
-        const token = this.ctx.cookies.get('tokenKey')
-        const checkToken = await this.service.token.checkToken(token)
-        if(!checkToken) {
-            this.ctx.status = 500;
-            this.ctx.body = {
-                msg: 'Internet Server Error!'
-            }
-            return
-        }
         const data = this.ctx.request.body;
         const pwd = await this.app.cryptoPwd(data.pwd)
         const user = await this.service.user.findOne(data.email);

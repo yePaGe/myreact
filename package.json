@@ -1,16 +1,20 @@
 {
-  "name": "reat-test",
+  "name": "server",
   "version": "1.0.0",
-  "description": "build my blog",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --hot --inline --colors --content-base",
-    "build": "webpack --progress --colors"
-  },
-  "author": "yepage",
-  "license": "ISC",
+  "description": "react",
+  "private": true,
   "dependencies": {
+    "ali-oss": "^5.1.1",
+    "bluebird": "^3.5.1",
+    "crypto-js": "^3.1.9-1",
+    "egg": "^2.2.1",
+    "egg-mongoose": "^2.1.1",
+    "egg-multipart": "^2.0.0",
+    "egg-oss": "^1.1.0",
+    "egg-scripts": "^2.5.0",
+    "egg-security": "^2.0.0",
+    "egg-view-nunjucks": "^2.1.4",
+    "stream-wormhole": "^1.0.3",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
@@ -22,6 +26,14 @@
     "webpack": "^3.10.0"
   },
   "devDependencies": {
+    "autod": "^3.0.1",
+    "autod-egg": "^1.0.0",
+    "egg-bin": "^4.3.5",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.14.0",
+    "eslint": "^4.11.0",
+    "eslint-config-egg": "^6.0.0",
+    "webstorm-disable-index": "^1.2.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -38,5 +50,27 @@
     "style-loader": "^0.20.1",
     "url-loader": "^0.6.2",
     "webpack-dev-server": "^2.11.1"
-  }
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "debug": "egg-bin debug",
+    "dev": "egg-scripts start --daemon --title=egg-server-server",
+    "tests": "npm run lint -- --fix && npm run test-local",
+    "testf": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --progress --colors",
+    "ser": "egg-bin dev &",
+    "fon": "webpack-dev-server --hot --inline --colors --content-base &",
+    "start": "concurrently \"npm run ser\" \"npm run fon\""
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "yepage",
+  "license": "MIT"
 }

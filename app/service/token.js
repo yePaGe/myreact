@@ -6,7 +6,7 @@ class TokenService extends Service {
   async createToken(data) {
     const nowDate = Date.now();
     const deadline = nowDate + (1000 * 60 * 60 * 24);
-    const token = await this.app.cryptoPwd(data._id + data.username)
+    const token = await this.app.cryptoPwd(data._id + data.username + deadline)
     const newToken = await this.ctx.model.Token.create({
         token: token,
         deadline: deadline,

@@ -51,6 +51,7 @@ class Top extends React.Component {
                     }
                 })
             }
+
         }
     }
     logout() {
@@ -66,9 +67,6 @@ class Top extends React.Component {
                 isShowAccount: false
             })
             window.location.reload()
-        }).catch((err) => {
-            console.log(err)
-            ui.Message.error('服务器出错~~~')
         })
     }
     toSign(type) {

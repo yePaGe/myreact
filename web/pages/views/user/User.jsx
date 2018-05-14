@@ -142,9 +142,6 @@ class User extends React.Component {
             this.setState({
                 loading: false
             })
-        }).catch((err) => {
-            console.log(err)
-            ui.Message.error('服务器出错~~~')
         })
     }
     delUser(id) {
@@ -159,9 +156,6 @@ class User extends React.Component {
         }).then((res) => {
             const data = res.data
             this.getUserList()
-        }).catch((err) => {
-            console.log(err)
-            ui.Message.error('服务器出错~~~')
         })
     }
     changeTab(type) {
@@ -183,9 +177,6 @@ class User extends React.Component {
                     logo: res.data.list[0].logo,
                     username: res.data.list[0].username
                 })
-            }).catch((err) => {
-                console.log(err)
-                ui.Message.error('服务器出错~~~')
             })
         }
         else if(type == 4) {
@@ -198,9 +189,6 @@ class User extends React.Component {
                 else {
                     ui.Message.error('获取图库名字列表失败~~~')
                 }
-            }).catch((err) => {
-                console.log(err)
-                ui.Message.error('获取图库名字列表失败~~~')
             })
         }
     }

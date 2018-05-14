@@ -8,7 +8,7 @@ module.exports = appInfo => {
   config.keys = '123456789' + appInfo;
 
   // add your config here
-  config.middleware = [];
+  config.middleware = ['checkToken'];
 
   config.security = {
     csrf: {

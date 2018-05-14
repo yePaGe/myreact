@@ -9,8 +9,8 @@ class UserController extends Controller {
         msg: 'first open',
       };
     } else { //2rd open check login
-      if (this.ctx.request.query.key) { //has token check token
-        const token = this.ctx.request.query.key;
+      if (this.ctx.request.header.authorization && this.ctx.request.header.authorization.length != 0) { //has token check token
+        const token = this.ctx.request.header.authorization;
         const nowDate = Date.now();
         const islogin = await this.service.token.checkToken(token);
         if (!islogin) { // no token fixed
@@ -100,15 +100,6 @@ class UserController extends Controller {
   }
 
   async logout() {
-    const token = this.ctx.cookies.get('tokenKey')
-    const checkToken = await this.service.token.checkToken(token)
-    if(!checkToken) {
-      this.ctx.status = 500;
-      this.ctx.body = {
-        msg: 'Internet Server Error!'
-      }
-      return
-    }
     const email = this.ctx.request.query.email;
     const user = await this.service.user.findOne(email)
     if(!user) {
@@ -118,8 +109,9 @@ class UserController extends Controller {
       }
     }
     else {
+      const token = this.ctx.request.header.authorization
       const logoutOK = await this.service.user.update(user._id, {islogin: false})
-      const delToken = await this.service.token.deleteToken(user.tokenId)
+      const delToken = await this.service.token.deleteToken(token)
       if(logoutOK && delToken) {
         this.ctx.body = {
           code: 0,
@@ -130,15 +122,6 @@ class UserController extends Controller {
   }
 
   async userList() {
-    const token = this.ctx.cookies.get('tokenKey')
-    const checkToken = await this.service.token.checkToken(token)
-    if(!checkToken) {
-      this.ctx.status = 500;
-      this.ctx.body = {
-        msg: 'Internet Server Error!'
-      }
-      return
-    }
     const userList = await this.service.user.getList()
     this.ctx.body = {
       code: 0,
@@ -147,15 +130,6 @@ class UserController extends Controller {
   }
 
   async delUser() {
-    const token = this.ctx.cookies.get('tokenKey')
-    const checkToken = await this.service.token.checkToken(token)
-    if(!checkToken) {
-      this.ctx.status = 500;
-      this.ctx.body = {
-        msg: 'Internet Server Error!'
-      }
-      return
-    }
     const id = this.ctx.request.query.id
     const del = await this.service.user.delete(id, tokenId)
     if(!del) {
@@ -179,15 +153,6 @@ class UserController extends Controller {
   }
 
   async searchUser() {
-    const token = this.ctx.cookies.get('tokenKey')
-    const checkToken = await this.service.token.checkToken(token)
-    if(!checkToken) {
-      this.ctx.status = 500;
-      this.ctx.body = {
-        msg: 'Internet Server Error!'
-      }
-      return
-    }
     const id = this.ctx.request.query.id;
     const email = this.ctx.request.query.email
     const res = await this.service.user.findOne(email, id)
@@ -208,15 +173,6 @@ class UserController extends Controller {
   }
 
   async editUser() {
-    const token = this.ctx.cookies.get('tokenKey')
-    const checkToken = await this.service.token.checkToken(token)
-    if(!checkToken) {
-      this.ctx.status = 500;
-      this.ctx.body = {
-        msg: 'Internet Server Error!'
-      }
-      return
-    }
     const data = this.ctx.request.body
     const updateRes = await this.service.user.update(data.id, {
       logo: data.logo,

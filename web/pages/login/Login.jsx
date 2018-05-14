@@ -53,8 +53,7 @@ class Login extends React.Component {
         React.axios.post('/server/login', {
             email: email,
             password: passwd
-        })
-            .then((res) =>{
+        }).then((res) =>{
                 const data = res.data
                 ui.Message({
                     type: data.code == 0 ? 'success' : 'error',
@@ -71,10 +70,6 @@ class Login extends React.Component {
                     window.sessionStorage.setItem('userMsg', JSON.stringify(userMsg))
                     this.props.logMsg(token)
                 }
-            })
-            .catch((err) =>{
-                console.log(err)
-                ui.Message.error('服务器出错~~~')
             })
     }
 

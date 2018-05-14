@@ -8,12 +8,7 @@ import { History } from 'react-router';
 class App extends React.Component{
 
     componentWillMount() {
-        let token = !window.sessionStorage.getItem('token') ? '' : window.sessionStorage.getItem('token')
-        React.axios.get('/server/islogin',{
-            params:{
-                key: token
-            }
-        }).then((res) => {
+        React.axios.get('/server/islogin').then((res) => {
             const data = res.data   
             let csrfToken = ''
             // csrfToken 的存储
@@ -81,4 +76,4 @@ const routes = (
     <Route path='/' component={App}></Route>
 );
 
-export default routes;
+export default App;
