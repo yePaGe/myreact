@@ -64,6 +64,10 @@ class App extends React.Component{
             <div>
                 <Switch>
                     <Route path='/home' component={Home}></Route>
+                    <Route path='/food' component={Home}></Route>
+                    <Route path='/travel' component={Home}></Route>
+                    <Route path='/movie' component={Home}></Route>
+                    <Route path='/hotel' component={Home}></Route>
                     <Route path='/user' component={User}></Route>
                     <Redirect from='/' to='/home'></Redirect>
                 </Switch>             
@@ -76,4 +80,4 @@ const routes = (
     <Route path='/' component={App}></Route>
 );
 
-export default App;
+export default routes;

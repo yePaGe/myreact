@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'element-theme-default';
 import axios from 'axios';
-import { HashRouter, Route, History } from 'react-router-dom';
+import { HashRouter, Route} from 'react-router-dom';
 import Routes from './router';
 const ui = require('element-react');
 

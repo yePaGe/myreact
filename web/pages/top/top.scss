@@ -1,8 +1,8 @@
-.carousel{
+.car-content{
     position: fixed;
     top: 0;
     width: 100%;
-    height: 800px;
+    height: 100%;
     background: url('../../assets/img/bannerbg.jpg')
 }
 .car-hide{
@@ -14,7 +14,7 @@
 }
 @keyframes carHide{
     from {
-        height: 800px;
+        height: 100%;
     }
     to {
         height: 80px;
@@ -23,7 +23,7 @@
 @-moz-keyframes carHide /* Firefox */
 {
     from {
-        height: 800px;
+        height: 100%;
     }
     to {
         height: 80px;
@@ -32,7 +32,7 @@
 @-webkit-keyframes carHide /* Safari and Chrome */
 {
     from {
-        height: 800px;
+        height: 100%;
     }
     to {
         height: 80px;
@@ -41,14 +41,14 @@
 @-o-keyframes carHide /* Opera */
 {
     from {
-        height: 800px;
+        height: 100%;
     }
     to {
         height: 80px;
     }
 }
 .car-show{
-    height: 800px;
+    height: 100%;
     animation: carShow 2s;
     -moz-animation:carShow 2s; /* Firefox */
     -webkit-animation:carShow 2s; /* Safari and Chrome */
@@ -60,7 +60,7 @@
         height: 80px;
     }
     to {
-        height: 800px;
+        height: 100%;
     }
 }
 @-moz-keyframes carShow /* Firefox */
@@ -69,7 +69,7 @@
         height: 80px;
     }
     to {
-        height: 800px;
+        height: 100%;
     }
 }
 @-webkit-keyframes carShow /* Safari and Chrome */
@@ -78,7 +78,7 @@
         height: 80px;
     }
     to {
-        height: 800px;
+        height: 100%;
     }
 }
 @-o-keyframes carShow /* Opera */
@@ -87,7 +87,7 @@
         height: 80px;
     }
     to {
-        height: 800px;
+        height: 100%;
     }
 }
 
@@ -144,12 +144,16 @@
     height: 40px;  
 }
 .nav-content{
-    margin-top: 100px;
     z-index: 100;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
+    width: 1800px;
+    margin: 150px auto 10px;
+    height: 600px;
 }
-.nav{
-    width: 22%;
+.nav-name{
+    width: 300px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    margin: 60px auto 10px;
 }

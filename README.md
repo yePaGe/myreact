@@ -12,6 +12,7 @@
 10. 'true' != true
 11. 多个不同变量判断注意解耦以及逻辑顺序
 12. 利用服务端的中间件，对指定请求url进行token验证，防范跨站点请求伪造，crsf攻击
+13. 在componentWillMount中执行异步请求，会出现内存泄漏，（关于react中切换路由时报以上错误，实际的原因是因为在组件挂载（mounted）之后进行了异步操作，比如ajax请求或者设置了定时器等，而你在callback中进行了setState操作。当你切换路由时，组件已经被卸载（unmounted）了，此时异步操作中callback还在执行，因此setState没有得到值。） 取消组件卸载~
 
 
 # 项目启动步骤：

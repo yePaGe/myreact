@@ -86,7 +86,7 @@ class ImgsController extends Controller {
             }
         }
     }
-    async itemList() {
+    async itemList() {  // id获取图片表
         const id = this.ctx.request.query.id;
         const stock = await this.service.img.findStock(id);
         if(!stock) {
@@ -102,7 +102,7 @@ class ImgsController extends Controller {
             }
         }
     }
-    async nameList() {
+    async nameList() { //图片库名称列表
         const list = await this.service.img.getNames()
         if(!list) {
             this.ctx.body = {

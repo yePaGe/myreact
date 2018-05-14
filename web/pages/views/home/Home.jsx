@@ -20,11 +20,14 @@ class Home extends React.Component {
     toEdit() {
         this.props.history.push('/user')
     }
+    navDetail(url, e) {
+        this.props.history.push(url)
+    }
     render() {
 
         return(
             <div className={mainCss.main}>
-                <Top ref='carStyle' toEdit={this.toEdit.bind(this)}/>
+                <Top ref='carStyle' toEdit={this.toEdit.bind(this)} navDetail={this.navDetail.bind(this)}/>
                 <div className={mainCss.container}></div>
             </div>
         )
