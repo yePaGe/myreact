@@ -1,0 +1,77 @@
+.menu-line1{
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin-top: 110px;
+}
+.menu-line2{
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin-top: 40px;
+    flex-direction: row-reverse;
+}
+.nav-content{
+    position: relative;
+    z-index: 10;
+    width: 500px;
+    margin: 10px 250px 10px 100px;
+    opacity: 0.8;
+    cursor: pointer;
+
+    .nav-name1{
+        position: absolute;
+        top: 60px;
+        right: -300px;
+        width: 300px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        color: #747474;
+        margin: 30px auto 10px;
+        transform: rotate(-20deg)
+    }
+    .nav-name2{
+        position: absolute;
+        top: 80px;
+        left: -230px;
+        width: 300px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        color: #747474;
+        margin: 30px auto 10px;
+        transform: rotate(20deg)
+    }
+    &:hover{
+        animation: focusShow 2s;
+        -moz-animation: focusShow 2s;	/* Firefox */
+        -webkit-animation: focusShow 2s;	/* Safari 和 Chrome */
+        -o-animation: focusShow 2s;	/* Opera */
+        opacity: 1;
+        transform: scale(1)
+    }
+    @keyframes focusShow
+    {
+        0% {opacity: 0.8;}
+        100% {opacity: 1; transform: scale(1.1)}
+    }
+
+    @-moz-keyframes focusShow /* Firefox */
+    {
+        0% {opacity: 0.8;}
+        100% {opacity: 1; transform: scale(1.1)}
+    }
+
+    @-webkit-keyframes focusShow /* Safari 和 Chrome */
+    {
+        0% {opacity: 0.8;}
+        100% {opacity: 1; transform: scale(1.1)}
+    }
+
+    @-o-keyframes focusShow /* Opera */
+    {
+        0% {opacity: 0.8;}
+        100% {opacity: 1; transform: scale(1.1)}
+    }
+}

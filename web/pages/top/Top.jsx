@@ -21,14 +21,11 @@ class Top extends React.Component {
             topLogo: require('../../assets/img/y-logo.png'),
             carouselStyle: '',
             showBtn: false,
-            navBtn:'',
-            topImgsList: [],
-            curNavTitle: ''
+            navBtn:''
         }
     }
     componentWillMount() {
         // 未登录不显示用户信息
-        this._isMounted = true
         if(!window.sessionStorage.token) {
             this.setState({
                 isShowAccount: false,
@@ -55,53 +52,7 @@ class Top extends React.Component {
                 })
             }
 
-        };
-    }
-    componentDidMount() {
-        this.topImgs()
-    }
-    componentWillUnmount() {
-        // 取消组件卸载
-        this.setState = (state,callback)=>{
-          return;
-        };
-    }
-    topImgs() {
-        
-        React.axios('/server/imgs/itemList', {
-            params: {
-                id: '5af010cd460e2e27b00bbca7'
-            }
-        }).then((res) => {
-            let list = res.data.list
-            this.setState({
-                topImgsList: list
-            })
-        })
-    }
-    carouselChange(e) {
-        this.setState({
-            curNavTitle: this.state.topImgsList[e].name + ' - ' + this.state.topImgsList[e].des
-        })
-    }
-    navDetail(e) {
-        let url = ''
-        switch(e) {
-            case '26b81261f827ae3a3a629c0d964084dd':
-                url = '/movie';
-                break;
-            case 'f278a0a5bac988c935f3ce6b45ea938e':
-                url = '/food';
-                break;
-            case 'ed5c2a51711633443b8801e72dcc1e1c':
-                url = '/hotel';
-                break;
-            case '7af001af966c1cf83aa60134f6256efa':
-                url = '/travl';
-                break;
         }
-        this.props.navDetail(url, e)
-        
     }
     logout() {
         const username = JSON.parse(window.sessionStorage.userMsg).name
@@ -232,8 +183,8 @@ class Top extends React.Component {
                             </div>
                     }
                 </div>
-                <div className={this.state.navBtn}>
-                    <ui.Carousel interval="4000" type="card" height="600px" indicatorPosition='none' onChange={this.carouselChange.bind(this)}>
+                {/* <div className={this.state.navBtn}> */}
+                    {/* <ui.Carousel interval="4000" type="card" height="600px" indicatorPosition='none' onChange={this.carouselChange.bind(this)}>
                         { 
                             this.state.topImgsList.map((e) => {
                                 return  <ui.Carousel.Item key={e.id}>
@@ -242,8 +193,8 @@ class Top extends React.Component {
                             }) 
                         }
                     </ui.Carousel>
-                    <div className={topCss['nav-name']}>{this.state.curNavTitle}</div>
-                </div>
+                    <div className={topCss['nav-name']}>{this.state.curNavTitle}</div> */}
+                {/* </div> */}
             </div>
         )
     }
