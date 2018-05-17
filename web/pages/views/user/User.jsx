@@ -651,8 +651,8 @@ class User extends React.Component {
             ui.Message.error('服务器出错 ~~~')
         })
     }
-    backHome() {
-        this.props.history.push('/home')
+    changeRoute(e) {
+        this.props.history.push(e)
     }
     switchIcon(num) {
         switch(num) {
@@ -675,7 +675,7 @@ class User extends React.Component {
         let img3Check = this.switchIcon(this.state.img3Check);
         return(
             <div className={mainCss.main}>
-                <Top back={this.backHome.bind(this)} ref='carStyle'/>
+                <Top changeRoute={this.changeRoute.bind(this)} ref='carStyle'/>
                 <div className={userCss.container}>
                     <div className={userCss['top-banner']}>
                         <div className={this.state.tabOne} onClick={this.changeTab.bind(this, 1)}>用户列表</div>

@@ -13,7 +13,6 @@
 }
 .nav-content{
     position: relative;
-    z-index: 10;
     width: 500px;
     margin: 10px 250px 10px 100px;
     opacity: 0.8;
@@ -74,4 +73,10 @@
         0% {opacity: 0.8;}
         100% {opacity: 1; transform: scale(1.1)}
     }
+}
+.menu-hide{
+    z-index: -1;
+}
+.menu-show{
+    z-index: 1;
 }

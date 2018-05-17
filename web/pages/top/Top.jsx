@@ -21,7 +21,9 @@ class Top extends React.Component {
             topLogo: require('../../assets/img/y-logo.png'),
             carouselStyle: '',
             showBtn: false,
-            navBtn:''
+            navBtn:'',
+            topImgsList: [],
+            showMenu: false
         }
     }
     componentWillMount() {
@@ -54,6 +56,27 @@ class Top extends React.Component {
 
         }
     }
+    componentDidMount() {
+        this._isMounted = true
+        this.getImgs()
+    }
+    componentWillUnmount() {
+        this._isMounted = false
+    }
+    getImgs() {
+        React.axios('/server/imgs/itemList', {
+            params: {
+                id: '5af010cd460e2e27b00bbca7'
+            }
+        }).then((res) => {
+            let list = res.data.list
+            if(this._isMounted) {
+                this.setState({
+                    topImgsList: list
+                })
+            }
+        })
+    }
     logout() {
         const username = JSON.parse(window.sessionStorage.userMsg).name
         React.axios('/server/logout', {
@@ -74,6 +97,7 @@ class Top extends React.Component {
             dialogOpen: true,
             loginOpen: type == 1 ? false : true 
         })
+        this.props.toHideMenu()
     }
     getSignMsg(type, event) {
         if(!type) {
@@ -85,12 +109,14 @@ class Top extends React.Component {
                     name: JSON.parse(window.sessionStorage.userMsg).name
                 }
             })
+            this.props.toHideMenu()
         }
         else if(type == 1) {
             if(event == 1) {
                 this.setState({
                     dialogOpen: false
                 })
+                this.props.toHideMenu()
             }
             else {
                 this.setState({
@@ -105,17 +131,16 @@ class Top extends React.Component {
             loginOpen: type == 1 ? true : false
         })
     }
-    toEdit() {
-        this.props.toEdit()
-    }
     changeCarousel(type, router) {
         if(type == 1) {
             this.setState({
-                carouselStyle: `${topCss['car-content']} ${topCss['car-hide']}`
+                carouselStyle: `${topCss['car-content']} ${topCss['car-hide']}`,
+                showMenu: true
             })
             if(router == '/user') {
                 this.setState({
-                    showBtn: true
+                    showBtn: true,
+                    showMenu: false
                 })
             }
         }
@@ -126,8 +151,35 @@ class Top extends React.Component {
             })
         }
     }
-    backHome() {
-        this.props.back()
+    toCancel() {
+        this.setState({ 
+            dialogOpen: false 
+        })
+        this.props.toHideMenu()
+    }
+    changeRoute(e) {
+        let url = ''
+        switch(e) {
+            case '26b81261f827ae3a3a629c0d964084dd':
+                url = '/movie';
+                break;
+            case 'f278a0a5bac988c935f3ce6b45ea938e':
+                url = '/food';
+                break;
+            case 'ed5c2a51711633443b8801e72dcc1e1c':
+                url = '/hotel';
+                break;
+            case '7af001af966c1cf83aa60134f6256efa':
+                url = '/travel';
+                break;
+            case 'backhome':
+                url = '/home';
+                break;
+            case 'toUser':
+                url = '/user';
+                break;
+        }
+        this.props.changeRoute(url)
     }
     render() {
         const tips = `${mainCss.mr20} ${mainCss.gray}`
@@ -138,8 +190,24 @@ class Top extends React.Component {
                     this.state.showBtn
                     ?   <div className={topCss['back-btn']}>
                             <ui.Tooltip className="item" effect="dark" content="返回首页" placement="right">
-                                <i className='el-icon-d-arrow-left' onClick={this.backHome.bind(this)}></i>
+                                <i className='el-icon-d-arrow-left' onClick={this.changeRoute.bind(this, 'backhome')}></i>
                             </ui.Tooltip>
+                        </div>
+                    :   <div></div>
+                }
+                {
+                    this.state.showMenu
+                    ?   <div className={topCss['top-menu']}>
+                            {
+                                this.state.topImgsList.map((e) => {
+                                    return (
+                                        <div key={e.id} className={topCss['litle-menu']} onClick={this.changeRoute.bind(this, e.id)}>
+                                            <img src={e.url} width='60px' height='40px'/>
+                                            <span style={{'display':'block','margin': '0 13px','fontSize': '10px', 'textAlign': 'center'}}>{e.name}</span>
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                     :   <div></div>
                 }
@@ -156,7 +224,7 @@ class Top extends React.Component {
                                     <div>
                                         <span className={tips} style={{'padding':'0 0 20px', 'display': 'inline-block'}}>hello, {this.state.accountMsg.name}</span>
                                         <img className={topCss.logo} src={this.state.accountMsg.img}/>
-                                        <ui.Button type='primary' size='mini' onClick={this.toEdit.bind(this)}>修改信息</ui.Button>
+                                        <ui.Button type='primary' size='mini' onClick={this.changeRoute.bind(this, 'toUser')}>修改信息</ui.Button>
                                         <ui.Button type='danger' size='mini' onClick={this.logout.bind(this)}>退出</ui.Button>
                                     </div>
                                 )}>
@@ -170,7 +238,7 @@ class Top extends React.Component {
                                     className={topCss['dialog-bg']}
                                     size="tiny"
                                     visible={ this.state.dialogOpen }
-                                    onCancel={ () => this.setState({ dialogOpen: false }) }
+                                    onCancel={ this.toCancel.bind(this) }
                                     lockScroll={ false }>
                                     <ui.Dialog.Body>
                                         {

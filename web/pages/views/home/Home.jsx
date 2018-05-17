@@ -37,18 +37,19 @@ class Home extends React.Component {
                 // }
             ],
             topImgsList2: [],
+            topImgsList: [],
+            hideMenu: false,
             curNavTitle: ''   
         }
     }
     componentDidMount() {
         this._isMounted = true
-        console.log('1', this._isMounted)
         this.getImgs()
         this.refs.carStyle.changeCarousel(2)
     }
     componentWillUnmount() {
         this._isMounted = false
-        console.log('3', this._isMounted)
+        // console.log('3', this._isMounted)
     }
     getImgs() {
         React.axios('/server/imgs/itemList', {
@@ -57,7 +58,6 @@ class Home extends React.Component {
             }
         }).then((res) => {
             let list = res.data.list
-            console.log('2', this._isMounted)
             if(this._isMounted) {
                 this.setState({
                     topImgsList1: [list[0], list[1]],
@@ -84,19 +84,25 @@ class Home extends React.Component {
                 url = '/hotel';
                 break;
             case '7af001af966c1cf83aa60134f6256efa':
-                url = '/travl';
+                url = '/travel';
                 break;
         }
-        this.props.history.push(url)
+        this.changeRoute(url)
     }
-    toEdit() {
-        this.props.history.push('/user')
+    changeRoute(e) {
+        this.props.history.push(e)
+    }
+    toHideMenu() {
+        this.setState({
+            hideMenu: !this.state.hideMenu
+        })
     }
     render() {
+        let isHide1 = this.state.hideMenu ? homeCss['menu-hide'] + ' ' + homeCss['menu-line1'] : homeCss['menu-show'] + ' ' + homeCss['menu-line1']
+        let isHide2 = this.state.hideMenu ? homeCss['menu-hide'] + ' ' + homeCss['menu-line2'] : homeCss['menu-show'] + ' ' + homeCss['menu-line2'] 
         return(
             <div className={mainCss.main}>
-                <Top ref='carStyle' toEdit={this.toEdit.bind(this)}/>
-                <div className={homeCss['menu-line1']}>
+                <div className={isHide1}>
                     {
                         this.state.topImgsList1.map((e) => {
                             return  <div key={e.id} className={homeCss['nav-content']}>
@@ -119,7 +125,7 @@ class Home extends React.Component {
                     </ui.Carousel> */}
                     {/* <div className={homeCss['nav-name']}>{this.state.curNavTitle}</div> */}
                 </div>
-                <div className={homeCss['menu-line2']}>
+                <div className={isHide2}>
                     {
                         this.state.topImgsList2.map((e) => {
                                 return  <div key={e.id} className={homeCss['nav-content']}>
@@ -132,6 +138,7 @@ class Home extends React.Component {
                         })
                     }
                 </div>
+                <Top ref='carStyle' changeRoute={this.changeRoute.bind(this)} toHideMenu={this.toHideMenu.bind(this)}/>
             </div>
         )
     }

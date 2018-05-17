@@ -3,6 +3,11 @@ import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import Home from '../pages/views/home/Home';
 import User from '../pages/views/user/User';
+import Food from '../pages/views/food/Food';
+import Travel from '../pages/views/travel/Travel';
+import Movie from '../pages/views/movie/Movie';
+import Hotel from '../pages/views/hotel/Hotel';
+
 import { History } from 'react-router';
 
 class App extends React.Component{
@@ -63,10 +68,10 @@ class App extends React.Component{
         return (
             <Switch>
                 <Route path='/home' component={Home}></Route>
-                <Route path='/food' component={Home}></Route>
-                <Route path='/travel' component={Home}></Route>
-                <Route path='/movie' component={Home}></Route>
-                <Route path='/hotel' component={Home}></Route>
+                <Route path='/food' component={Food}></Route>
+                <Route path='/travel' component={Travel}></Route>
+                <Route path='/movie' component={Movie}></Route>
+                <Route path='/hotel' component={Hotel}></Route>
                 <Route path='/user' component={User}></Route>
                 <Redirect from='/' to='/home'></Redirect>
             </Switch>             

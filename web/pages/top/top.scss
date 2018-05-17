@@ -143,4 +143,16 @@
     z-index: 9999;
     height: 40px;  
 }
-
+.top-menu{
+    position: absolute;
+    top: 0;
+    left: 40%;
+    display: flex;
+    justify-content: space-around;
+    width: 500px;
+    .litle-menu{
+        z-index: 1;
+        margin: 15px;
+        cursor: pointer;
+    }
+}
