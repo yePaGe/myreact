@@ -14,6 +14,7 @@ let config = {
         chunkFilename: 'chunk/[name].[chunkhask].js',
         publicPath: 'dist/'
     },
+    // devtool: 'eval-source-map',
     resolve: {
         extensions: ['.js', '.json', '.jsx', '.css']
     },

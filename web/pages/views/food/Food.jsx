@@ -26,7 +26,7 @@ class Food extends React.Component {
         return(
             <div className={mainCss.main}>
                 <Top changeRoute={this.changeRoute.bind(this)} ref='carStyle'/>
-                
+                <h1 style={{'marginTop': '150px'}}>food</h1>
             </div>
         )
     }

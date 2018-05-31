@@ -44,6 +44,7 @@ class Register extends React.Component {
             ui.Message.error('please enter your email!')
             return
         }
+        console.log(email, emailSize.test(email))
         if(emailSize.test(email) == false) {
             ui.Message.error('please enter correct email!')
             return

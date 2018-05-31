@@ -25,7 +25,8 @@ class Hotel extends React.Component {
     render() {
         return(
             <div className={mainCss.main}>
-                <Top changeRoute={this.changeRoute.bind(this)} ref='carStyle'/>             
+                <Top changeRoute={this.changeRoute.bind(this)} ref='carStyle'/>
+                <h1 style={{'marginTop': '150px'}}>hotel</h1>
             </div>
         )
     }

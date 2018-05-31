@@ -26,7 +26,7 @@ class Movie extends React.Component {
         return(
             <div className={mainCss.main}>
                 <Top changeRoute={this.changeRoute.bind(this)} ref='carStyle'/>
-                
+                <h1 style={{'marginTop': '150px'}}>movie</h1>
             </div>
         )
     }

@@ -19,6 +19,7 @@ class App extends React.Component{
             // csrfToken 的存储
             if(!window.sessionStorage.csrfToken) {
                 let getCookie = document.cookie
+                console.log('cookie', getCookie)
                 let cookie = getCookie.split(';')
                 let cookieList = cookie.map((item) => {
                     let i = item.split('=')
@@ -27,6 +28,7 @@ class App extends React.Component{
                     let name = Object.keys(obj)[0].trim()
                     if(name == 'csrfToken') {
                         csrfToken = Object.values(obj)[0]
+                        console.log('csrf', csrfToken)
                         window.sessionStorage.setItem('csrfToken', csrfToken)
                     }
                     return obj

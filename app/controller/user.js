@@ -4,6 +4,7 @@ const Controller = require('egg').Controller;
 class UserController extends Controller {
   async islogin() {    
     if (!this.ctx.request.header.cookie) { //first open no cookies
+      this.ctx.cookies.set('csrfToken', Math.random().toString(36).substr(2))
       this.ctx.body = {
         code: 1,
         msg: 'first open',
