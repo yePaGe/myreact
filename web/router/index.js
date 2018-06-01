@@ -17,30 +17,21 @@ class App extends React.Component{
             const data = res.data   
             let csrfToken = ''
             // csrfToken 的存储
-            if(!window.sessionStorage.csrfToken) {
-                let getCookie = document.cookie
-                console.log('cookie', getCookie)
-                let cookie = getCookie.split(';')
-                let cookieList = cookie.map((item) => {
-                    let i = item.split('=')
-                    let obj = {}
-                    obj[i[0]] = i[1]
-                    let name = Object.keys(obj)[0].trim()
-                    if(name == 'csrfToken') {
-                        csrfToken = Object.values(obj)[0]
-                        console.log('csrf', csrfToken)
-                        window.sessionStorage.setItem('csrfToken', csrfToken)
-                    }
-                    return obj
-                })           
-            }  
-            else {
-                csrfToken = window.sessionStorage.getItem('csrfToken')
-            }
+            let getCookie = document.cookie
+            let cookie = getCookie.split(';')
+            console.log('cookie', getCookie)
+            let cookieList = cookie.map((item) => {
+                let i = item.split('=')
+                let obj = {}
+                obj[i[0]] = i[1]
+                let name = Object.keys(obj)[0].trim()
+                if(name == 'csrfToken') {
+                    csrfToken = Object.values(obj)[0]
+                }
+                return obj
+            })
             // 给post请求带上csrfToken
             React.axios.defaults.headers.post['x-csrf-token'] = csrfToken;
-            
-            console.log('res',data)
             
             if(!data.code) { // 已登录就调转到当前路由的页面
                 ui.Message.success('用户已登录，正在跳转~~~')

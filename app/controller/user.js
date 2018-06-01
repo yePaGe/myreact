@@ -4,7 +4,6 @@ const Controller = require('egg').Controller;
 class UserController extends Controller {
   async islogin() {    
     if (!this.ctx.request.header.cookie) { //first open no cookies
-      this.ctx.cookies.set('csrfToken', Math.random().toString(36).substr(2))
       this.ctx.body = {
         code: 1,
         msg: 'first open',
@@ -82,7 +81,8 @@ class UserController extends Controller {
         const loginDate = this.app.formateDate(0);
         const tokenKey = await this.service.token.createToken(user);
         await this.service.user.update(user.id, { islogin: true, lastLogin: loginDate, tokenId: tokenKey._id });
-        this.ctx.cookies.set('tokenKey', tokenKey.token);
+        // this.ctx.cookies.set('tokenKey', tokenKey.token);
+        this.ctx.rotateCsrfSecret();
         this.ctx.body = {
           code: 0,
           logo: user.logo,

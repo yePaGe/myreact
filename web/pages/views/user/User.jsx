@@ -287,6 +287,9 @@ class User extends React.Component {
             imgList.push(obj)
         }
         imgList = JSON.stringify(imgList)
+        if(this.state.stockName == '') {
+            ui.Message.warning('请选择图库')
+        }
         React.axios.post('/server/imgs/add', {
             id: this.state.stockName,
             list: imgList

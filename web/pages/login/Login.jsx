@@ -69,6 +69,22 @@ class Login extends React.Component {
                     window.sessionStorage.setItem('token', token)
                     window.sessionStorage.setItem('userMsg', JSON.stringify(userMsg))
                     this.props.logMsg(token)
+                    let getCookie = document.cookie
+                    console.log('cookie', getCookie)
+                    let cookie = getCookie.split(';')
+                    let csrfToken = ''
+                    let cookieList = cookie.map((item) => {
+                        let i = item.split('=')
+                        let obj = {}
+                        obj[i[0]] = i[1]
+                        let name = Object.keys(obj)[0].trim()
+                        if(name == 'csrfToken') {
+                            csrfToken = Object.values(obj)[0]
+                        }
+                        return obj
+                    })
+                    React.axios.defaults.headers.post['x-csrf-token'] = csrfToken;
+                    console.log(React.axios.defaults.headers.post)
                 }
             })
     }

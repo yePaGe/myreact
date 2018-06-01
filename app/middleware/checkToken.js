@@ -3,7 +3,7 @@ const routes = require('../uitls/publicRoute');
 module.exports = options => {
     return async function checkToken(ctx, next) {
         let rr = routes.indexOf(ctx.path)
-        if(routes.indexOf(ctx.path) > -1) {
+        if(rr > -1) {
             await next()
         }
         else {
