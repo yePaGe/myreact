@@ -13,7 +13,9 @@ class Food extends React.Component {
             showUploadCon: false,
             uploadUrl: '',
             localImgList: [],
-            nameList: []
+            nameList: [],
+            hotImgList: [],
+            imgList: []
         }
     }
     componentWillMount() {
@@ -36,6 +38,12 @@ class Food extends React.Component {
             showUploadCon: true,
             conName: '图库上传'
         })
+    }
+    cancelUpload() {
+
+    }
+    saveUpload() {
+        
     }
     render() {
         return(
@@ -95,7 +103,7 @@ class Food extends React.Component {
                                         }
                                     </ui.Select>
                                     {
-                                        this.imgList.length == 0
+                                        this.state.imgList.length == 0
                                         ?   <div></div>
                                         :   <div>
                                                 

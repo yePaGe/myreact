@@ -1,6 +1,7 @@
 'use strict';
 
 const Service = require('egg').Service;
+const deasync = require('deasync');
 
 class ImgService extends Service {
     async createName(name) {
@@ -17,11 +18,26 @@ class ImgService extends Service {
         return stock;
     }
 
-    async findStock(id) {
-        const stock = await this.ctx.model.Img.findOne({
-            _id: id
-        });
-        return stock;
+    async findStock(id, ids) {
+        let list = []
+        if(!id) {
+            ids = JSON.parse(ids);
+            let count = 0, len = ids.length;
+            ids.forEach((e) => {
+                this.ctx.model.Img.findOne({ _id: e }, (err, res) => {
+                    list.push(res)
+                    count++;
+                })
+            })
+            deasync.loopWhile(() => count < len);
+            return list;
+        }
+        else {
+            this.ctx.model.Img.findOne({ _id: id }, (err, res) => {
+                list.push(res)
+            })
+        }
+        return list;
     }
 
     async updateStock(id, list) {

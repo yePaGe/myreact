@@ -8,7 +8,7 @@ module.exports = appInfo => {
   config.keys = '123456789' + appInfo;
 
   // add your config here
-  config.middleware = ['checkToken'];
+  config.middleware = [ 'checkToken' ];
 
   config.security = {
     csrf: {
@@ -31,7 +31,7 @@ module.exports = appInfo => {
       endpoint: 'oss-cn-beijing.aliyuncs.com',
       timeout: '60s',
     },
-    useAgent: true
+    useAgent: true,
   };
 
   return config;

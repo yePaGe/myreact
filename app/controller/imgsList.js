@@ -88,7 +88,8 @@ class ImgsController extends Controller {
     }
     async itemList() {  // id获取图片表
         const id = this.ctx.request.query.id;
-        const stock = await this.service.img.findStock(id);
+        const ids = this.ctx.request.query.ids;
+        const stock = await this.service.img.findStock(id, ids);
         if(!stock) {
             this.ctx.body = {
                 code: 1,
@@ -98,7 +99,7 @@ class ImgsController extends Controller {
         else {
             this.ctx.body = {
                 code: 0,
-                list: stock.list
+                list: stock
             }
         }
     }

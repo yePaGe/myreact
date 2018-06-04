@@ -180,17 +180,20 @@ class User extends React.Component {
             })
         }
         else if(type == 4) {
-            React.axios('/server/imgs/nameList').then((res) => {
-                if(!res.data.code) {
-                    this.setState({
-                        stockNameList: res.data.list
-                    })
-                }
-                else {
-                    ui.Message.error('获取图库名字列表失败~~~')
-                }
-            })
+            this.getStockNameList()
         }
+    }
+    getStockNameList() {
+        React.axios('/server/imgs/nameList').then((res) => {
+            if(!res.data.code) {
+                this.setState({
+                    stockNameList: res.data.list
+                })
+            }
+            else {
+                ui.Message.error('获取图库名字列表失败~~~')
+            }
+        })
     }
     openLogo() {
         let iptObj = document.getElementById('logo-ipt');
@@ -575,6 +578,7 @@ class User extends React.Component {
                 type: !res.data.code ? 'success' : 'error',
                 message: !res.data.code ? '创建成功~~~' : res.data.msg
             })
+            this.getStockNameList()
         }).catch((err) => {
             consle.log(err)
             ui.Message.error()
